@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/UI%20Library?token=AU5RGEYKD27J2RY3I2KY7WLBL6ULC", true))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/UI%20Library", true))()
 ------------------------------------------------------------------------------------------
 library.theme = {
     fontsize = 15,

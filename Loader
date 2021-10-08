@@ -1,0 +1,92 @@
+local library = loadstring(game:HttpGet("https://pastebin.com/raw/9sUBiCQ8", true))()
+------------------------------------------------------------------------------------------
+library.theme = {
+    fontsize = 15,
+    titlesize = 18,
+    topheight = 30,
+    tilesize = 60,
+    font = Enum.Font.RobotoMono,
+    background = "rbxassetid://5553946656",
+    backgroundcolor = Color3.fromRGB(20, 20, 20),
+    tabstextcolor = Color3.fromRGB(240, 240, 240),
+    bordercolor = Color3.fromRGB(60, 60, 60),
+    accentcolor = Color3.fromRGB(28, 56, 139),
+    accentcolor2 = Color3.fromRGB(16, 31, 78),
+    outlinecolor = Color3.fromRGB(60, 60, 60),
+    outlinecolor2 = Color3.fromRGB(0, 0, 0),
+    sectorcolor = Color3.fromRGB(30, 30, 30),
+    toptextcolor = Color3.fromRGB(255, 255, 255),
+    topcolor = Color3.fromRGB(30, 30, 30),
+    topcolor2 = Color3.fromRGB(30, 30, 30),
+    buttoncolor = Color3.fromRGB(49, 49, 49),
+    buttoncolor2 = Color3.fromRGB(39, 39, 39),
+    itemscolor = Color3.fromRGB(200, 200, 200),
+    itemscolor2 = Color3.fromRGB(210, 210, 210)
+}
+
+------------------------------------------------------------------------------------------
+local exolineloader = library:CreateWindow("exoline loader", Vector2.new(350, 200), Enum.KeyCode.RightShift)
+------------------------------------------------------------------------------------------
+local loader = game.CoreGui["exoline loader"]
+------------------------------------------------------------------------------------------
+local LoaderTab = exolineloader:CreateTab("Loader")
+
+local mainSector = LoaderTab:CreateSector("Main", "left")
+
+local CreditsSector = LoaderTab:CreateSector("Credits", "right")
+
+local ZeoxLabel = CreditsSector:AddLabel("zeox#8534")
+
+local PracticalLabel = CreditsSector:AddLabel("PracticalJoke#5840")
+
+local LoadButton = mainSector:AddButton("load", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/Main", true))()
+    loader:Destroy()
+end)
+------------------------------------------------------------------------------------------
+local ExtraTab = exolineloader:CreateTab("Extra")
+
+local ScriptsSector = ExtraTab:CreateSector("Counter Blox Scripts", "left")
+
+local LoadButton = ScriptsSector:AddButton("Hexagon", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/Roblox-Scripts/main/Hexagon.lua", true))()
+    loader:Destroy()
+end)
+
+local LoadButton = ScriptsSector:AddButton("Bloxwheels", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/Roblox-Scripts/main/BloxWheels", true))()
+    loader:Destroy()
+end)
+
+local LoadButton = ScriptsSector:AddButton("Stormy", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/leaks-cracks/main/Stormy.Solutions.lua", true))()
+    loader:Destroy()
+end)
+
+local LoadButton = ScriptsSector:AddButton("Bloxsense", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/leaks-cracks/main/bloxsense.lua", true))()
+    loader:Destroy()
+end)
+
+local LoadButton = ScriptsSector:AddButton("Nixus", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/leaks-cracks/main/NixusB.lua", true))()
+    loader:Destroy()
+end)
+
+local LoadButton = ScriptsSector:AddButton("Bloxfun", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NineR-9R/BloxFun/main/source.lua", true))()
+    loader:Destroy()
+end)
+
+local LoadButton = ScriptsSector:AddButton("Millionblox", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/leaks-cracks/main/Millionblox.lua", true))()
+    loader:Destroy()
+end)
+------------------------------------------------------------------------------------------
+local MoreSector = ExtraTab:CreateSector("More", "right")
+local Button = MoreSector:AddButton("Copy Game Invite", function()
+    setclipboard("Roblox.GameLauncher.joinGameInstance("..game.PlaceId..", '"..game.JobId.."')")
+end)
+local Button = MoreSector:AddButton("Rejoin", function()
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+end)

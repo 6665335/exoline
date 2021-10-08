@@ -1,0 +1,620 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/UI%20Library?token=AU5RGEYKD27J2RY3I2KY7WLBL6ULC", true))()
+------------------------------------------------------------------------------------------
+library.theme = {
+    fontsize = 15,
+    titlesize = 18,
+    font = Enum.Font.Code,
+    background = "rbxassetid://5553946656",
+    tilesize = 60,
+    backgroundcolor = Color3.fromRGB(20, 20, 20),
+    tabstextcolor = Color3.fromRGB(240, 240, 240),
+    bordercolor = Color3.fromRGB(60, 60, 60),
+    accentcolor = Color3.fromRGB(28, 56, 139),
+    accentcolor2 = Color3.fromRGB(16, 31, 78),
+    outlinecolor = Color3.fromRGB(60, 60, 60),
+    outlinecolor2 = Color3.fromRGB(0, 0, 0),
+    sectorcolor = Color3.fromRGB(30, 30, 30),
+    toptextcolor = Color3.fromRGB(255, 255, 255),
+    topheight = 35,
+    topcolor = Color3.fromRGB(30, 30, 30),
+    topcolor2 = Color3.fromRGB(30, 30, 30),
+    buttoncolor = Color3.fromRGB(49, 49, 49),
+    buttoncolor2 = Color3.fromRGB(39, 39, 39),
+    itemscolor = Color3.fromRGB(200, 200, 200),
+    itemscolor2 = Color3.fromRGB(210, 210, 210)
+}
+------------------------------------------------------------------------------------------
+local Instnew = Instance.new
+local GUI = game.CoreGui
+local Camera = game.workspace.CurrentCamera
+local CCE = Instnew("ColorCorrectionEffect", Camera)
+local Lighting = game.Lighting
+local player = game:GetService("Players").LocalPlayer.Character
+local client = game.Players.LocalPlayer
+------------------------------------------------------------------------------------------
+local exoline = library:CreateWindow("exoline", Vector2.new(435, 450), Enum.KeyCode.RightShift)
+------------------------------------------------------------------------------------------
+local VisualsTab = exoline:CreateTab("Visuals")
+local MiscTab = exoline:CreateTab("Misc")
+local SettingsTab = exoline:CreateTab("Settings")
+------------------------------------------------------------------------------------------
+local mainSector = MiscTab:CreateSector("Main", "left")
+local SkinsSector = MiscTab:CreateSector("Skins", "right")
+------------------------------------------------------------------------------------------
+local WorldSector = VisualsTab:CreateSector("World", "left")
+local ViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
+------------------------------------------------------------------------------------------
+local Button = SkinsSector:AddButton("Unlock All", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NineR-9R/NineRs-Skin-Unlocker/main/Skin-Unlocker.lua"))()
+end)
+
+local SL = mainSector:AddToggle("Spectator List", false, function(val)
+if val == true then 
+    local SpectatorsList = Instance.new("ScreenGui")
+    local Frame = Instance.new("Frame")
+    local Players = Instance.new("TextLabel")
+    local ListText = Instance.new("TextLabel")
+    
+    SpectatorsList.Name = "SpectatorsList"
+    SpectatorsList.Parent = GUI
+    SpectatorsList.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    Frame.Parent = SpectatorsList
+    Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Frame.BorderColor3 = Color3.fromRGB(70, 40, 100)
+    Frame.BorderSizePixel = 0
+    Frame.Position = UDim2.new(0, 2, 0, 380)
+    Frame.Size = UDim2.new(0, 164, 0, 20)
+    
+    Players.Name = "Players"
+    Players.Parent = Frame
+    Players.Active = true
+    Players.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Players.BackgroundTransparency = 1.000
+    Players.BorderColor3 = Color3.fromRGB(70, 40, 100)
+    Players.BorderSizePixel = 0
+    Players.Position = UDim2.new(0, 0, 1, 0)
+    Players.Size = UDim2.new(0, 164, 0, 54)
+    Players.ZIndex = 1000
+    Players.Font = Enum.Font.RobotoMono
+    Players.Text = "Players"
+    Players.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Players.TextSize = 14.000
+    Players.TextYAlignment = Enum.TextYAlignment.Top
+    
+    ListText.Name = "List Text"
+    ListText.Parent = Frame
+    ListText.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    ListText.BorderColor3 = Color3.fromRGB(30, 60, 130)
+    ListText.Size = UDim2.new(0, 164, 0, 20)
+    ListText.Font = Enum.Font.RobotoMono
+    ListText.Text = "Spectators"
+    ListText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ListText.TextSize = 14.000
+    
+    local function CCZDN_fake_script() -- Frame.Drag 
+    	local script = Instance.new('LocalScript', Frame)
+    
+    	local UIS = game:GetService("UserInputService")
+    	function dragify(Frame)
+    		dragToggle = nil
+    		local dragSpeed = 0.5
+    		dragInput = nil
+    		dragStart = nil
+    		local dragPos = nil
+    		function updateInput(input)
+    			local Delta = input.Position - dragStart
+    			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+    			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
+    		end
+    		Frame.InputBegan:Connect(function(input)
+    			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+    				dragToggle = true
+    				dragStart = input.Position
+    				startPos = Frame.Position
+    				input.Changed:Connect(function()
+    					if input.UserInputState == Enum.UserInputState.End then
+    						dragToggle = false
+    					end
+    				end)
+    			end
+    		end)
+    		Frame.InputChanged:Connect(function(input)
+    			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+    				dragInput = input
+    			end
+    		end)
+    		game:GetService("UserInputService").InputChanged:Connect(function(input)
+    			if input == dragInput and dragToggle then
+    				updateInput(input)
+    			end
+    		end)
+    	end
+    	
+    	dragify(script.Parent)
+    end
+    coroutine.wrap(CCZDN_fake_script)()
+    local function NOPZPRT_fake_script() -- SpectatorsList.LocalScript 
+    	local script = Instance.new('LocalScript', SpectatorsList)
+    
+    	function GetSpectators()
+    		local CurrentSpectators = ""
+    		for i,v in pairs(game.Players:GetChildren()) do 
+    			pcall(function()
+    				if v ~= game.Players.LocalPlayer then
+    					if not v.Character then 
+    						if (v.CameraCF.Value.p - game.Workspace.CurrentCamera.CFrame.p).Magnitude < 10 then 
+    							if CurrentSpectators == "" then
+    								CurrentSpectators = v.Name
+    							else
+    								CurrentSpectators = CurrentSpectators.. "\n" ..v.Name
+    							end
+    						end
+    					end
+    				end
+    			end)
+    		end
+    		return CurrentSpectators
+    	end
+    	spawn(function()
+    		while wait(0.01) do
+    			if SpectatorsList.Enabled then
+    				Players.Text = GetSpectators()
+    			end
+    		end
+    	end)
+    end
+coroutine.wrap(NOPZPRT_fake_script)()
+
+end
+if val == false then
+        GUI.SpectatorsList:Destroy()
+    end
+end)
+
+local SLCP = SL:AddColorpicker(Color3.new(1,1,1), function(val)
+    GUI.SpectatorsList.Frame["List Text"].BorderColor3 = val
+end)
+
+local WM = mainSector:AddToggle("Watermark", false, function(val)
+if val == true then
+	local watermark = Instance.new("ScreenGui")
+	local ScreenLabel = Instance.new("Frame")
+	local Container = Instance.new("Frame")
+	local UIPadding = Instance.new("UIPadding")
+	local Text = Instance.new("TextLabel")
+	local Time = Instance.new("TextLabel")
+	local Background = Instance.new("Frame")
+	local UIGradient = Instance.new("UIGradient")
+
+	watermark.Name = "watermark"
+	watermark.Parent = GUI
+	watermark.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+	ScreenLabel.Name = "ScreenLabel"
+	ScreenLabel.Parent = watermark
+	ScreenLabel.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+	ScreenLabel.BorderColor3 = Color3.fromRGB(30, 60, 130)
+	ScreenLabel.Position = UDim2.new(0, 1764, 0, -33)
+	ScreenLabel.Size = UDim2.new(0, 139, 0, 23)
+
+	Container.Name = "Container"
+	Container.Parent = ScreenLabel
+	Container.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Container.BorderSizePixel = 0
+	Container.Position = UDim2.new(0, 0, 0.300000012, 0)
+	Container.Size = UDim2.new(0, 0, 0, 2)
+
+	UIPadding.Parent = Container
+	UIPadding.PaddingLeft = UDim.new(0, 4)
+
+	Text.Name = "Text"
+	Text.Parent = Container
+	Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Text.BackgroundTransparency = 1.000
+	Text.BorderSizePixel = 0
+	Text.Position = UDim2.new(0, 0, 0, -6)
+	Text.Size = UDim2.new(0, 77, 0, 22)
+	Text.ZIndex = 3
+	Text.Font = Enum.Font.RobotoMono
+	Text.Text = "exoline |"
+	Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Text.TextSize = 14.000
+	Text.TextWrapped = true
+
+	Time.Name = "Time"
+	Time.Parent = Container
+	Time.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Time.BackgroundTransparency = 1.000
+	Time.BorderSizePixel = 0
+	Time.Position = UDim2.new(0, 61, 0, -6)
+	Time.Size = UDim2.new(0, 83, 0, 22)
+	Time.ZIndex = 2
+	Time.Font = Enum.Font.RobotoMono
+	Time.Text = "00:00:00"
+	Time.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Time.TextSize = 14.000
+
+	Background.Name = "Background"
+	Background.Parent = ScreenLabel
+	Background.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Background.BorderSizePixel = 0
+	Background.Position = UDim2.new(0, 0, 0.300000012, 0)
+	Background.Size = UDim2.new(0, 0, 0, 2)
+
+	UIGradient.Parent = Background
+
+	local function YVDWKR_fake_script() -- ScreenLabel.timescript 
+		local script = Instance.new('LocalScript', ScreenLabel)
+
+		local ContainerFrame = script.Parent:WaitForChild("Container")
+		local TimeLabel = ContainerFrame:WaitForChild("Time")
+		
+		while wait() do
+			local seconds = os.date("*t") ["sec"]
+			local minutes = os.date("*t") ["min"]
+			local hours = os.date("*t") ["hour"]
+		
+			if tonumber(seconds) <= 9 then
+				seconds = "0"..seconds
+			end
+		
+			if tonumber(minutes) <= 9 then
+				minutes = "0"..minutes
+			end
+		
+			if tonumber(hours) <= 9 then
+				hours = "0"..hours
+			end
+		
+			TimeLabel.Text = hours..":"..minutes..":"..seconds
+		end
+	end
+	coroutine.wrap(YVDWKR_fake_script)()
+	local function VKXSBE_fake_script() -- ScreenLabel.dragscript 
+		local script = Instance.new('LocalScript', ScreenLabel)
+
+		local UIS = game:GetService("UserInputService")
+		function dragify(Frame)
+			dragToggle = nil
+			local dragSpeed = 0.5
+			dragInput = nil
+			dragStart = nil
+			local dragPos = nil
+			function updateInput(input)
+				local Delta = input.Position - dragStart
+				local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+				game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
+			end
+			Frame.InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+					dragToggle = true
+					dragStart = input.Position
+					startPos = Frame.Position
+					input.Changed:Connect(function()
+						if input.UserInputState == Enum.UserInputState.End then
+							dragToggle = false
+						end
+					end)
+				end
+			end)
+	    
+			Frame.InputChanged:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+					dragInput = input
+				end
+			end)
+			game:GetService("UserInputService").InputChanged:Connect(function(input)
+				if input == dragInput and dragToggle then
+					updateInput(input)
+				end
+			end)
+		end
+		
+		dragify(script.Parent)
+	end
+	coroutine.wrap(VKXSBE_fake_script)()
+end
+	if val == false then
+		GUI.watermark:Destroy()
+	end
+end) 
+
+local WMCP = WM:AddColorpicker(Color3.new(1,1,1), function(val)
+    GUI.watermark.ScreenLabel.BorderColor3 = val
+end)
+
+local KS = mainSector:AddToggle("Keystrokes", false, function(val)
+if val == true then
+local Keystrokes = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local W = Instance.new("TextLabel")
+local A = Instance.new("TextLabel")
+local S = Instance.new("TextLabel")
+local D = Instance.new("TextLabel")
+
+Keystrokes.Name = "Keystrokes"
+Keystrokes.Parent = GUI
+Keystrokes.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Main.Name = "Main"
+Main.Parent = Keystrokes
+Main.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Main.BackgroundTransparency = 1.000
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.45694533, 0, 0.776843429, 0)
+Main.Size = UDim2.new(0, 137, 0, 120)
+
+W.Name = "W"
+W.Parent = Main
+W.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+W.BackgroundTransparency = 1.000
+W.Position = UDim2.new(0.457768559, 0, 0.258625597, 0)
+W.Size = UDim2.new(0, 30, 0, 30)
+W.Visible = false
+W.Font = Enum.Font.RobotoMono
+W.Text = "W"
+W.TextColor3 = Color3.fromRGB(255, 255, 255)
+W.TextSize = 14.000
+
+A.Name = "A"
+A.Parent = Main
+A.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+A.BackgroundTransparency = 1.000
+A.Position = UDim2.new(0.238790333, 0, 0.508625627, 0)
+A.Size = UDim2.new(0, 30, 0, 30)
+A.Visible = false
+A.Font = Enum.Font.RobotoMono
+A.Text = "A"
+A.TextColor3 = Color3.fromRGB(255, 255, 255)
+A.TextSize = 14.000
+
+S.Name = "S"
+S.Parent = Main
+S.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+S.BackgroundTransparency = 1.000
+S.Position = UDim2.new(0.457768559, 0, 0.508625686, 0)
+S.Size = UDim2.new(0, 30, 0, 30)
+S.Visible = false
+S.Font = Enum.Font.RobotoMono
+S.Text = "S"
+S.TextColor3 = Color3.fromRGB(255, 255, 255)
+S.TextSize = 14.000
+
+D.Name = "D"
+D.Parent = Main
+D.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+D.BackgroundTransparency = 1.000
+D.Position = UDim2.new(0.676746488, 0, 0.508625627, 0)
+D.Size = UDim2.new(0, 30, 0, 30)
+D.Visible = false
+D.Font = Enum.Font.RobotoMono
+D.Text = "D"
+D.TextColor3 = Color3.fromRGB(255, 255, 255)
+D.TextSize = 14.000
+
+local function RIWJK_fake_script() -- Main.ShowPress 
+	local script = Instance.new('LocalScript', Main)
+
+	local UIS = game:GetService("UserInputService")
+	
+	UIS.InputBegan:Connect(function(key)
+		if key.KeyCode == Enum.KeyCode.W then
+			script.Parent.W.Visible = true
+		else
+			if key.KeyCode == Enum.KeyCode.A then
+				script.Parent.A.Visible = true
+			else
+				if key.KeyCode == Enum.KeyCode.S then
+					script.Parent.S.Visible = true
+				else
+					if key.KeyCode == Enum.KeyCode.D then
+						script.Parent.D.Visible = true
+					end
+				end
+			end
+		end
+	end)
+		
+	UIS.InputEnded:Connect(function(key)
+		if key.KeyCode == Enum.KeyCode.W then
+			script.Parent.W.Visible = false
+		else
+			if key.KeyCode == Enum.KeyCode.A then
+				script.Parent.A.Visible = false
+			else
+				if key.KeyCode == Enum.KeyCode.S then
+					script.Parent.S.Visible = false
+				else
+					if key.KeyCode == Enum.KeyCode.D then
+						script.Parent.D.Visible = false
+					end
+				end
+			end
+		end
+	end)
+end
+coroutine.wrap(RIWJK_fake_script)()
+
+end
+    if val == false then
+        GUI.Keystrokes:Destroy()
+    end
+end)
+
+local KSCP = KS:AddColorpicker(Color3.new(1,1,1), function(val)
+    GUI.Keystrokes.Main.W.TextColor3 = val
+    GUI.Keystrokes.Main.A.TextColor3 = val
+    GUI.Keystrokes.Main.S.TextColor3 = val
+    GUI.Keystrokes.Main.D.TextColor3 = val
+end)
+
+local PL = mainSector:AddToggle("Player Trail", false, function(val)
+    if val == true then
+        PlrTrail = game:GetService("RunService").RenderStepped:Connect(function()
+            pcall(function()
+                local player = game:GetService("Players").LocalPlayer
+                local LFoot = Instance.new("Attachment",player.Character.LeftFoot)
+                local RFoot = Instance.new("Attachment",player.Character.RightFoot)
+                local Trail = Instance.new("Trail")
+                Trail.Attachment0 = LFoot
+                Trail.Attachment1 = RFoot
+                Trail.Lifetime = 3
+                Trail.Parent = LFoot.Parent
+                Trail.Color = val
+            end)
+        end)
+    end
+    if val == false then
+        PlrTrail:Disconnect()
+    end
+end)
+
+local PLCP = PL:AddColorpicker(Color3.new(1, 1, 1), function(val)
+    Trail.Color = val
+end)
+
+local Toggle = mainSector:AddToggle("Old Sounds", false, function(val)
+if val == true then
+OldSounds = game:GetService("RunService").RenderStepped:Connect(function()
+    pcall(function()
+		local player = game:GetService("Players").LocalPlayer.Character
+		if player.EquippedTool.Value == "AK47" then
+			player.Gun.Shoot.SoundId = "rbxassetid://1112730119"
+		end
+
+		if player.EquippedTool.Value == "M4A1" then
+			player.Gun.SShoot.SoundId = "rbxassetid://1665639883"
+			player.Gun.Shoot.SoundId = "rbxassetid://223013951"
+		end
+
+        	if player.EquippedTool.Value == "Glock" then
+			player.Gun.Shoot.SoundId = "rbxassetid://1112951656"
+		end
+
+		if player.EquippedTool.Value == "Galil" then
+			player.Gun.Shoot.SoundId = "rbxassetid://344800912"
+		end
+
+		if player.EquippedTool.Value == "USP" then
+			player.Gun.SShoot.SoundId = "rbxassetid://1112952739"
+			player.Gun.Shoot.SoundId = "rbxassetid://1665652648"
+		end
+
+		if player.EquippedTool.Value == "P250" then
+			player.Gun.Shoot.SoundId = "rbxassetid://340365431"
+		end
+
+		if player.EquippedTool.Value == "DesertEagle" then
+			player.Gun.Shoot.SoundId = "rbxassetid://202918645"
+		end
+
+		if player.EquippedTool.Value == "MP9" then
+			player.Gun.Shoot.SoundId = "rbxassetid://222888810"
+		end
+
+		if player.EquippedTool.Value == "UMP" then
+			player.Gun.Shoot.SoundId = "rbxassetid://206953341"
+		end
+
+		if player.EquippedTool.Value == "Famas" then
+			player.Gun.Shoot.SoundId = "rbxassetid://206953280"
+		end
+
+		if player.EquippedTool.Value == "Scout" then
+			player.Gun.Shoot.SoundId = "rbxassetid://1112858108"
+		end
+
+		if player.EquippedTool.Value == "AUG" then
+			player.Gun.Shoot.SoundId = "rbxassetid://1657593449"
+		end
+
+		if player.EquippedTool.Value == "AWP" then
+			player.Gun.Shoot.SoundId = "rbxassetid://202918637"
+		end
+
+		if player.EquippedTool.Value == "G3SG1" then
+			player.Gun.Shoot.SoundId = "rbxassetid://340365815"
+		end
+
+		if player.EquippedTool.Value == "Negev" then
+			player.Gun.Shoot.SoundId = "rbxassetid://396243767"
+		end
+
+		if player.EquippedTool.Value == "SG" then
+			player.Gun.Shoot.SoundId = "rbxassetid://347270113"
+		end
+
+     	if player.EquippedTool.Value == "M4A4" then
+			player.Gun.Shoot.SoundId = "rbxassetid://202918741"
+		end
+
+      	if player.EquippedTool.Value == "Tec9" then
+			player.Gun.Shoot.SoundId = "rbxassetid://206953317"
+      	end	
+	    
+	   	 if player.EquippedTool.Value == "MP7" then
+	        player.Gun.Shoot.SoundId = "rbxassetid://2752835613"
+    	     end
+        end)
+    end)
+end
+    if val == false then
+        OldSounds:Disconnect()
+    end
+end)
+------------------------------------------------------------------------------------------
+loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
+------------------------------------------------------------------------------------------
+local Toggle = ViewmodelSector:AddToggle("Enabled", false, function(val)
+    ViewmodelEnabled = val
+end)
+
+local Slider = ViewmodelSector:AddSlider("Offset X", 0, 180, 360, 1, function(val)
+    ViewmodelX = val
+end)
+
+local Slider = ViewmodelSector:AddSlider("Offset Y", 0, 180, 360, 1, function(val)
+    ViewmodelY = val
+end)
+
+local Slider = ViewmodelSector:AddSlider("Offset Z", 0, 180, 360, 1, function(val)
+    ViewmodelZ = val
+end)
+------------------------------------------------------------------------------------------
+local ColorPicker = WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
+    CCE.TintColor = val
+end)
+
+local Slider = WorldSector:AddSlider("Saturation", 0, 0, 3, 1, function(val)
+    CCE.Saturation = val
+end)
+
+local Slider = WorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, function(val)
+    Lighting.TimeOfDay = val
+end)
+------------------------------------------------------------------------------------------
+loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
+------------------------------------------------------------------------------------------
+local mt = getrawmetatable(game)
+local oldNamecall = mt.__namecall
+setreadonly(mt, false)
+mt.__namecall = newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    local callingscript = getcallingscript()
+    local args = {...}
+	if not checkcaller() then
+		if method == "SetPrimaryPartCFrame" and self.Name == "Arms" and ViewmodelEnabled == true then
+			args[1] = args[1] * CFrame.new(Vector3.new(math.rad(ViewmodelX-180), math.rad(ViewmodelY-180), math.rad(ViewmodelZ-180)))
+		elseif method == "FireServer" and self.Name == "HitPart" then
+		elseif method == "InvokeServer" and self.Name == "Moolah" then
+			return wait(99e99)
+		elseif method == "Kick" then
+			return
+		elseif method == "FireServer" and self.Name == "ControlTurn" and SECHS == true then
+			return
+		end
+	end
+    return oldNamecall(self, unpack(args))
+end)
+------------------------------------------------------------------------------------------

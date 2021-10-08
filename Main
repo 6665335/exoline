@@ -1,11 +1,12 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/UI%20Library", true))()
+local library = loadstring(game:HttpGet("https://pastebin.com/raw/9sUBiCQ8", true))()
 ------------------------------------------------------------------------------------------
 library.theme = {
     fontsize = 15,
     titlesize = 18,
-    font = Enum.Font.Code,
-    background = "rbxassetid://5553946656",
+    topheight = 35,
     tilesize = 60,
+    font = Enum.Font.RobotoMono,
+    background = "rbxassetid://5553946656",
     backgroundcolor = Color3.fromRGB(20, 20, 20),
     tabstextcolor = Color3.fromRGB(240, 240, 240),
     bordercolor = Color3.fromRGB(60, 60, 60),
@@ -15,7 +16,6 @@ library.theme = {
     outlinecolor2 = Color3.fromRGB(0, 0, 0),
     sectorcolor = Color3.fromRGB(30, 30, 30),
     toptextcolor = Color3.fromRGB(255, 255, 255),
-    topheight = 35,
     topcolor = Color3.fromRGB(30, 30, 30),
     topcolor2 = Color3.fromRGB(30, 30, 30),
     buttoncolor = Color3.fromRGB(49, 49, 49),
@@ -32,7 +32,7 @@ local Lighting = game.Lighting
 local player = game:GetService("Players").LocalPlayer.Character
 local client = game.Players.LocalPlayer
 ------------------------------------------------------------------------------------------
-local exoline = library:CreateWindow("exoline", Vector2.new(435, 450), Enum.KeyCode.RightShift)
+local exoline = library:CreateWindow("exoline", Vector2.new(435, 450), Enum.KeyCode.Insert)
 ------------------------------------------------------------------------------------------
 local VisualsTab = exoline:CreateTab("Visuals")
 local MiscTab = exoline:CreateTab("Misc")
@@ -461,7 +461,7 @@ local PL = mainSector:AddToggle("Player Trail", false, function(val)
                 Trail.Attachment1 = RFoot
                 Trail.Lifetime = 3
                 Trail.Parent = LFoot.Parent
-                Trail.Color = val
+                Trail.Color = Color3.new(255,1,1)
             end)
         end)
     end

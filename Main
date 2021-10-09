@@ -35,13 +35,40 @@ local VisualsTab = exoline:CreateTab("Visuals")
 local MiscTab = exoline:CreateTab("Misc")
 local SettingsTab = exoline:CreateTab("Settings")
 ------------------------------------------------------------------------------------------
-local MenuSector = SettingsTab:CreateSector("Menu")
+local MenuSector = SettingsTab:CreateSector("Menu", "right")
+local ConfigSector = SettingsTab:CreateSector("Configs", "left")
 ------------------------------------------------------------------------------------------
 local mainSector = MiscTab:CreateSector("Main", "left")
 local SkinsSector = MiscTab:CreateSector("Skins", "right")
 ------------------------------------------------------------------------------------------
 local WorldSector = VisualsTab:CreateSector("World", "left")
 local ViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
+------------------------------------------------------------------------------------------
+local Label = ConfigSector:AddLabel("Config Name")
+
+local Textbox = ConfigSector:AddTextbox("", "", function(val)
+    print("Textbox", val)
+end)
+
+local Dropdown = ConfigSector:AddDropdown("Select Config", {"Config 1", "Config 3", "Config 4", "Config 5", "Config 6", }, "", function(val)
+    print("Dropdown", val)
+end)
+
+local Button = ConfigSector:AddButton("Create", function() 
+    print("Created Config")
+end)
+
+local Button = ConfigSector:AddButton("Save", function() 
+    print("Saved Config")
+end)
+
+local Button = ConfigSector:AddButton("Load", function() 
+    print("Loaded Config")
+end)
+
+local Button = ConfigSector:AddButton("Delete", function() 
+    print("Deleted Config")
+end)
 ------------------------------------------------------------------------------------------
 local Label = MenuSector:AddLabel("Menu Name")
 

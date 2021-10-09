@@ -580,16 +580,16 @@ local Slider = ViewmodelSector:AddSlider("Offset Z", 0, 180, 360, 1, "", functio
     ViewmodelZ = val
 end)
 ------------------------------------------------------------------------------------------
-local ColorPicker = WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
-    CCE.TintColor = val
-end)
-
 local Slider = WorldSector:AddSlider("Saturation", 0, 0, 3, 1, "", function(val)
     CCE.Saturation = val
 end)
 
 local Slider = WorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, "", function(val)
     Lighting.TimeOfDay = val
+end)
+
+local ColorPicker = WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
+    CCE.TintColor = val
 end)
 ------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels

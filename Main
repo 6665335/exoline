@@ -2,13 +2,11 @@ local library = loadstring(game:HttpGet("https://pastebin.com/raw/9sUBiCQ8", tru
 ------------------------------------------------------------------------------------------
 library.theme = {
     fontsize = 15,
-    titlesize = 18,
-    topheight = 35,
-    tilesize = 60,
-    font = Enum.Font.RobotoMono,
-    background = "rbxassetid://5553946656",
+    tilesize = 100,
+    font = Enum.Font.Code,
+    background = "rbxassetid://6880496154",
     backgroundcolor = Color3.fromRGB(20, 20, 20),
-    tabstextcolor = Color3.fromRGB(240, 240, 240),
+    tabstextcolor = Color3.fromRGB(230, 230, 230),
     bordercolor = Color3.fromRGB(60, 60, 60),
     accentcolor = Color3.fromRGB(28, 56, 139),
     accentcolor2 = Color3.fromRGB(16, 31, 78),
@@ -17,18 +15,17 @@ library.theme = {
     sectorcolor = Color3.fromRGB(30, 30, 30),
     toptextcolor = Color3.fromRGB(255, 255, 255),
     topcolor = Color3.fromRGB(30, 30, 30),
-    topcolor2 = Color3.fromRGB(30, 30, 30),
+    topcolor2 = Color3.fromRGB(12, 12, 12),
     buttoncolor = Color3.fromRGB(49, 49, 49),
     buttoncolor2 = Color3.fromRGB(39, 39, 39),
-    itemscolor = Color3.fromRGB(200, 200, 200),
-    itemscolor2 = Color3.fromRGB(210, 210, 210)
+    itemscolor = Color3.fromRGB(200, 200, 200)
 }
 ------------------------------------------------------------------------------------------
 local Instnew = Instance.new
+local Lighting = game.Lighting
 local GUI = game.CoreGui
 local Camera = game.workspace.CurrentCamera
 local CCE = Instnew("ColorCorrectionEffect", Camera)
-local Lighting = game.Lighting
 local player = game:GetService("Players").LocalPlayer.Character
 local client = game.Players.LocalPlayer
 ------------------------------------------------------------------------------------------
@@ -38,11 +35,19 @@ local VisualsTab = exoline:CreateTab("Visuals")
 local MiscTab = exoline:CreateTab("Misc")
 local SettingsTab = exoline:CreateTab("Settings")
 ------------------------------------------------------------------------------------------
+local MenuSector = SettingsTab:CreateSector("Menu")
+------------------------------------------------------------------------------------------
 local mainSector = MiscTab:CreateSector("Main", "left")
 local SkinsSector = MiscTab:CreateSector("Skins", "right")
 ------------------------------------------------------------------------------------------
 local WorldSector = VisualsTab:CreateSector("World", "left")
 local ViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
+------------------------------------------------------------------------------------------
+local Label = MenuSector:AddLabel("Menu Name")
+
+local Name = MenuSector:AddTextbox("", "exoline", function(val)
+    GUI.exoline.main.top.title.Text = val
+end)
 ------------------------------------------------------------------------------------------
 local Button = SkinsSector:AddButton("Unlock All", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NineR-9R/NineRs-Skin-Unlocker/main/Skin-Unlocker.lua"))()
@@ -451,7 +456,7 @@ end)
 
 local PL = mainSector:AddToggle("Player Trail", false, function(val)
     if val == true then
-        PlrTrail = game:GetService("RunService").RenderStepped:Connect(function()
+        PlayerTrail = game:GetService("RunService").RenderStepped:Connect(function()
             pcall(function()
                 local player = game:GetService("Players").LocalPlayer
                 local LFoot = Instance.new("Attachment",player.Character.LeftFoot)
@@ -461,108 +466,101 @@ local PL = mainSector:AddToggle("Player Trail", false, function(val)
                 Trail.Attachment1 = RFoot
                 Trail.Lifetime = 3
                 Trail.Parent = LFoot.Parent
-                Trail.Color = Color3.new(255,1,1)
+                Trail.Color3 = Color3.new(255,1,1)
             end)
         end)
     end
     if val == false then
-        PlrTrail:Disconnect()
+        PlayerTrail:Disconnect()
     end
 end)
 
-local PLCP = PL:AddColorpicker(Color3.new(1, 1, 1), function(val)
+local PLCP = PL:AddColorpicker(Color3.new(1,1,1), function(val)
     Trail.Color = val
 end)
 
 local Toggle = mainSector:AddToggle("Old Sounds", false, function(val)
 if val == true then
-OldSounds = game:GetService("RunService").RenderStepped:Connect(function()
-    pcall(function()
-		local player = game:GetService("Players").LocalPlayer.Character
-		if player.EquippedTool.Value == "AK47" then
-			player.Gun.Shoot.SoundId = "rbxassetid://1112730119"
-		end
-
-		if player.EquippedTool.Value == "M4A1" then
-			player.Gun.SShoot.SoundId = "rbxassetid://1665639883"
-			player.Gun.Shoot.SoundId = "rbxassetid://223013951"
-		end
-
-        	if player.EquippedTool.Value == "Glock" then
-			player.Gun.Shoot.SoundId = "rbxassetid://1112951656"
-		end
-
-		if player.EquippedTool.Value == "Galil" then
-			player.Gun.Shoot.SoundId = "rbxassetid://344800912"
-		end
-
-		if player.EquippedTool.Value == "USP" then
-			player.Gun.SShoot.SoundId = "rbxassetid://1112952739"
-			player.Gun.Shoot.SoundId = "rbxassetid://1665652648"
-		end
-
-		if player.EquippedTool.Value == "P250" then
-			player.Gun.Shoot.SoundId = "rbxassetid://340365431"
-		end
-
-		if player.EquippedTool.Value == "DesertEagle" then
-			player.Gun.Shoot.SoundId = "rbxassetid://202918645"
-		end
-
-		if player.EquippedTool.Value == "MP9" then
-			player.Gun.Shoot.SoundId = "rbxassetid://222888810"
-		end
-
-		if player.EquippedTool.Value == "UMP" then
-			player.Gun.Shoot.SoundId = "rbxassetid://206953341"
-		end
-
-		if player.EquippedTool.Value == "Famas" then
-			player.Gun.Shoot.SoundId = "rbxassetid://206953280"
-		end
-
-		if player.EquippedTool.Value == "Scout" then
-			player.Gun.Shoot.SoundId = "rbxassetid://1112858108"
-		end
-
-		if player.EquippedTool.Value == "AUG" then
-			player.Gun.Shoot.SoundId = "rbxassetid://1657593449"
-		end
-
-		if player.EquippedTool.Value == "AWP" then
-			player.Gun.Shoot.SoundId = "rbxassetid://202918637"
-		end
-
-		if player.EquippedTool.Value == "G3SG1" then
-			player.Gun.Shoot.SoundId = "rbxassetid://340365815"
-		end
-
-		if player.EquippedTool.Value == "Negev" then
-			player.Gun.Shoot.SoundId = "rbxassetid://396243767"
-		end
-
-		if player.EquippedTool.Value == "SG" then
-			player.Gun.Shoot.SoundId = "rbxassetid://347270113"
-		end
-
-     	if player.EquippedTool.Value == "M4A4" then
-			player.Gun.Shoot.SoundId = "rbxassetid://202918741"
-		end
-
-      	if player.EquippedTool.Value == "Tec9" then
-			player.Gun.Shoot.SoundId = "rbxassetid://206953317"
-      	end	
-	    
-	   	 if player.EquippedTool.Value == "MP7" then
-	        player.Gun.Shoot.SoundId = "rbxassetid://2752835613"
-    	     end
+    OldSounds = game:GetService("RunService").RenderStepped:Connect(function()
+        pcall(function()
+    		local player = game:GetService("Players").LocalPlayer.Character
+    		if player.EquippedTool.Value == "AK47" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://1112730119"
+    		end
+    
+    		if player.EquippedTool.Value == "M4A1" then
+    			player.Gun.SShoot.SoundId = "rbxassetid://1665639883"
+    			player.Gun.Shoot.SoundId = "rbxassetid://2515498997"
+    		end
+    
+            	if player.EquippedTool.Value == "Glock" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://1112951656"
+    		end
+    
+    		if player.EquippedTool.Value == "Galil" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://344800912"
+    		end
+    
+    		if player.EquippedTool.Value == "USP" then
+    			player.Gun.SShoot.SoundId = "rbxassetid://1112952739"
+    			player.Gun.Shoot.SoundId = "rbxassetid://2515499360"
+    		end
+    
+    		if player.EquippedTool.Value == "P250" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://340365431"
+    		end
+    
+    		if player.EquippedTool.Value == "DesertEagle" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://202918645"
+    		end
+    
+    		if player.EquippedTool.Value == "MP9" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://222888810"
+    		end
+    
+    		if player.EquippedTool.Value == "UMP" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://206953341"
+    		end
+    
+    		if player.EquippedTool.Value == "Famas" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://206953280"
+    		end
+    
+    		if player.EquippedTool.Value == "Scout" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://1112858108"
+    		end
+    
+    		if player.EquippedTool.Value == "AUG" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://515215839"
+    		end
+    
+    		if player.EquippedTool.Value == "AWP" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://202918637"
+    		end
+    
+    		if player.EquippedTool.Value == "G3SG1" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://340365815"
+    		end
+    
+    		if player.EquippedTool.Value == "SG" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://347270113"
+    		end
+    
+         	if player.EquippedTool.Value == "M4A4" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://202918741"
+    		end
+    
+          	if player.EquippedTool.Value == "Tec9" then
+    			player.Gun.Shoot.SoundId = "rbxassetid://206953317"
+          	    end
+            end)
         end)
-    end)
-end
+    end
     if val == false then
         OldSounds:Disconnect()
     end
 end)
+
 ------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
 ------------------------------------------------------------------------------------------
@@ -570,15 +568,15 @@ local Toggle = ViewmodelSector:AddToggle("Enabled", false, function(val)
     ViewmodelEnabled = val
 end)
 
-local Slider = ViewmodelSector:AddSlider("Offset X", 0, 180, 360, 1, function(val)
+local Slider = ViewmodelSector:AddSlider("Offset X", 0, 180, 360, 1, "", function(val)
     ViewmodelX = val
 end)
 
-local Slider = ViewmodelSector:AddSlider("Offset Y", 0, 180, 360, 1, function(val)
+local Slider = ViewmodelSector:AddSlider("Offset Y", 0, 180, 360, 1, "", function(val)
     ViewmodelY = val
 end)
 
-local Slider = ViewmodelSector:AddSlider("Offset Z", 0, 180, 360, 1, function(val)
+local Slider = ViewmodelSector:AddSlider("Offset Z", 0, 180, 360, 1, "", function(val)
     ViewmodelZ = val
 end)
 ------------------------------------------------------------------------------------------
@@ -586,11 +584,11 @@ local ColorPicker = WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), fun
     CCE.TintColor = val
 end)
 
-local Slider = WorldSector:AddSlider("Saturation", 0, 0, 3, 1, function(val)
+local Slider = WorldSector:AddSlider("Saturation", 0, 0, 3, 1, "", function(val)
     CCE.Saturation = val
 end)
 
-local Slider = WorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, function(val)
+local Slider = WorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, "", function(val)
     Lighting.TimeOfDay = val
 end)
 ------------------------------------------------------------------------------------------

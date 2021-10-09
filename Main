@@ -21,11 +21,11 @@ library.theme = {
     itemscolor = Color3.fromRGB(200, 200, 200)
 }
 ------------------------------------------------------------------------------------------
-local Instnew = Instance.new
-local Lighting = game.Lighting
+local INST = Instance.new
+local Lighting = game:GetService("Lighting")
 local GUI = game.CoreGui
 local Camera = game.workspace.CurrentCamera
-local CCE = Instnew("ColorCorrectionEffect", Camera)
+local CCE = INST("ColorCorrectionEffect", Camera)
 local player = game:GetService("Players").LocalPlayer.Character
 local client = game.Players.LocalPlayer
 ------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ local SkinsSector = MiscTab:CreateSector("Skins", "right")
 local WorldSector = VisualsTab:CreateSector("World", "left")
 local ViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
 ------------------------------------------------------------------------------------------
-local Label = ConfigSector:AddLabel("Config Name")
+local ConfigName = ConfigSector:AddLabel("Config Name")
 
 local Textbox = ConfigSector:AddTextbox("", "", function(val)
     print("Textbox", val)
@@ -71,9 +71,13 @@ local Button = ConfigSector:AddButton("Delete", function()
 end)
 ------------------------------------------------------------------------------------------
 local Label = MenuSector:AddLabel("Menu Name")
-
-local Name = MenuSector:AddTextbox("", "exoline", function(val)
+local Textbox = MenuSector:AddTextbox("", "exoline", function(val)
     GUI.exoline.main.top.title.Text = val
+end)
+
+local Label = MenuSector:AddLabel("Watermark Name")
+local Textbox = MenuSector:AddTextbox("", "exoline", function(val)
+    GUI.watermark.ScreenLabel.Container.Text.Text = val
 end)
 ------------------------------------------------------------------------------------------
 local Button = SkinsSector:AddButton("Unlock All", function()
@@ -82,10 +86,10 @@ end)
 
 local SL = mainSector:AddToggle("Spectator List", false, function(val)
 if val == true then 
-    local SpectatorsList = Instance.new("ScreenGui")
-    local Frame = Instance.new("Frame")
-    local Players = Instance.new("TextLabel")
-    local ListText = Instance.new("TextLabel")
+    local SpectatorsList = INST("ScreenGui")
+    local Frame = INST("Frame")
+    local Players = INST("TextLabel")
+    local ListText = INST("TextLabel")
     
     SpectatorsList.Name = "SpectatorsList"
     SpectatorsList.Parent = GUI
@@ -93,7 +97,7 @@ if val == true then
     
     Frame.Parent = SpectatorsList
     Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    Frame.BorderColor3 = Color3.fromRGB(70, 40, 100)
+    Frame.BorderColor3 = Color3.fromRGB(255, 255, 255)
     Frame.BorderSizePixel = 0
     Frame.Position = UDim2.new(0, 2, 0, 380)
     Frame.Size = UDim2.new(0, 164, 0, 20)
@@ -103,7 +107,7 @@ if val == true then
     Players.Active = true
     Players.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
     Players.BackgroundTransparency = 1.000
-    Players.BorderColor3 = Color3.fromRGB(70, 40, 100)
+    Players.BorderColor3 = Color3.fromRGB(255, 255, 255)
     Players.BorderSizePixel = 0
     Players.Position = UDim2.new(0, 0, 1, 0)
     Players.Size = UDim2.new(0, 164, 0, 54)
@@ -117,7 +121,7 @@ if val == true then
     ListText.Name = "List Text"
     ListText.Parent = Frame
     ListText.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    ListText.BorderColor3 = Color3.fromRGB(30, 60, 130)
+    ListText.BorderColor3 = Color3.fromRGB(255, 255, 255)
     ListText.Size = UDim2.new(0, 164, 0, 20)
     ListText.Font = Enum.Font.RobotoMono
     ListText.Text = "Spectators"
@@ -125,7 +129,7 @@ if val == true then
     ListText.TextSize = 14.000
     
     local function CCZDN_fake_script() -- Frame.Drag 
-    	local script = Instance.new('LocalScript', Frame)
+    	local script = INST('LocalScript', Frame)
     
     	local UIS = game:GetService("UserInputService")
     	function dragify(Frame)
@@ -167,7 +171,7 @@ if val == true then
     end
     coroutine.wrap(CCZDN_fake_script)()
     local function NOPZPRT_fake_script() -- SpectatorsList.LocalScript 
-    	local script = Instance.new('LocalScript', SpectatorsList)
+    	local script = INST('LocalScript', SpectatorsList)
     
     	function GetSpectators()
     		local CurrentSpectators = ""
@@ -197,9 +201,7 @@ if val == true then
     	end)
     end
 coroutine.wrap(NOPZPRT_fake_script)()
-
-end
-if val == false then
+elseif val == false then
         GUI.SpectatorsList:Destroy()
     end
 end)
@@ -210,144 +212,116 @@ end)
 
 local WM = mainSector:AddToggle("Watermark", false, function(val)
 if val == true then
-	local watermark = Instance.new("ScreenGui")
-	local ScreenLabel = Instance.new("Frame")
-	local Container = Instance.new("Frame")
-	local UIPadding = Instance.new("UIPadding")
-	local Text = Instance.new("TextLabel")
-	local Time = Instance.new("TextLabel")
-	local Background = Instance.new("Frame")
-	local UIGradient = Instance.new("UIGradient")
-
-	watermark.Name = "watermark"
-	watermark.Parent = GUI
-	watermark.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-	ScreenLabel.Name = "ScreenLabel"
-	ScreenLabel.Parent = watermark
-	ScreenLabel.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
-	ScreenLabel.BorderColor3 = Color3.fromRGB(30, 60, 130)
-	ScreenLabel.Position = UDim2.new(0, 1764, 0, -33)
-	ScreenLabel.Size = UDim2.new(0, 139, 0, 23)
-
-	Container.Name = "Container"
-	Container.Parent = ScreenLabel
-	Container.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Container.BorderSizePixel = 0
-	Container.Position = UDim2.new(0, 0, 0.300000012, 0)
-	Container.Size = UDim2.new(0, 0, 0, 2)
-
-	UIPadding.Parent = Container
-	UIPadding.PaddingLeft = UDim.new(0, 4)
-
-	Text.Name = "Text"
-	Text.Parent = Container
-	Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Text.BackgroundTransparency = 1.000
-	Text.BorderSizePixel = 0
-	Text.Position = UDim2.new(0, 0, 0, -6)
-	Text.Size = UDim2.new(0, 77, 0, 22)
-	Text.ZIndex = 3
-	Text.Font = Enum.Font.RobotoMono
-	Text.Text = "exoline |"
-	Text.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Text.TextSize = 14.000
-	Text.TextWrapped = true
-
-	Time.Name = "Time"
-	Time.Parent = Container
-	Time.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Time.BackgroundTransparency = 1.000
-	Time.BorderSizePixel = 0
-	Time.Position = UDim2.new(0, 61, 0, -6)
-	Time.Size = UDim2.new(0, 83, 0, 22)
-	Time.ZIndex = 2
-	Time.Font = Enum.Font.RobotoMono
-	Time.Text = "00:00:00"
-	Time.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Time.TextSize = 14.000
-
-	Background.Name = "Background"
-	Background.Parent = ScreenLabel
-	Background.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Background.BorderSizePixel = 0
-	Background.Position = UDim2.new(0, 0, 0.300000012, 0)
-	Background.Size = UDim2.new(0, 0, 0, 2)
-
-	UIGradient.Parent = Background
-
-	local function YVDWKR_fake_script() -- ScreenLabel.timescript 
-		local script = Instance.new('LocalScript', ScreenLabel)
-
-		local ContainerFrame = script.Parent:WaitForChild("Container")
-		local TimeLabel = ContainerFrame:WaitForChild("Time")
-		
-		while wait() do
-			local seconds = os.date("*t") ["sec"]
-			local minutes = os.date("*t") ["min"]
-			local hours = os.date("*t") ["hour"]
-		
-			if tonumber(seconds) <= 9 then
-				seconds = "0"..seconds
-			end
-		
-			if tonumber(minutes) <= 9 then
-				minutes = "0"..minutes
-			end
-		
-			if tonumber(hours) <= 9 then
-				hours = "0"..hours
-			end
-		
-			TimeLabel.Text = hours..":"..minutes..":"..seconds
-		end
-	end
-	coroutine.wrap(YVDWKR_fake_script)()
-	local function VKXSBE_fake_script() -- ScreenLabel.dragscript 
-		local script = Instance.new('LocalScript', ScreenLabel)
-
-		local UIS = game:GetService("UserInputService")
-		function dragify(Frame)
-			dragToggle = nil
-			local dragSpeed = 0.5
-			dragInput = nil
-			dragStart = nil
-			local dragPos = nil
-			function updateInput(input)
-				local Delta = input.Position - dragStart
-				local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
-				game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
-			end
-			Frame.InputBegan:Connect(function(input)
-				if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
-					dragToggle = true
-					dragStart = input.Position
-					startPos = Frame.Position
-					input.Changed:Connect(function()
-						if input.UserInputState == Enum.UserInputState.End then
-							dragToggle = false
-						end
-					end)
-				end
-			end)
-	    
-			Frame.InputChanged:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-					dragInput = input
-				end
-			end)
-			game:GetService("UserInputService").InputChanged:Connect(function(input)
-				if input == dragInput and dragToggle then
-					updateInput(input)
-				end
-			end)
-		end
-		
-		dragify(script.Parent)
-	end
-	coroutine.wrap(VKXSBE_fake_script)()
-end
-	if val == false then
+    local watermark = INST("ScreenGui")
+    local ScreenLabel = INST("Frame")
+    local Container = INST("Frame")
+    local UIPadding = INST("UIPadding")
+    local Text = INST("TextLabel")
+    local Time = INST("TextLabel")
+    local TextLabel = INST("TextLabel")
+    local Background = INST("Frame")
+    local UIGradient = INST("UIGradient")
+    
+    watermark.Name = "watermark"
+    watermark.Parent = GUI
+    watermark.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    ScreenLabel.Name = "ScreenLabel"
+    ScreenLabel.Parent = watermark
+    ScreenLabel.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+    ScreenLabel.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    ScreenLabel.Position = UDim2.new(0, 1764, 0, -33)
+    ScreenLabel.Size = UDim2.new(0, 139, 0, 23)
+    
+    Container.Name = "Container"
+    Container.Parent = ScreenLabel
+    Container.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Container.BorderSizePixel = 0
+    Container.Position = UDim2.new(0, 0, 0.300000012, 0)
+    Container.Size = UDim2.new(0, 0, 0, 2)
+    
+    UIPadding.Parent = Container
+    UIPadding.PaddingLeft = UDim.new(0, 4)
+    
+    Text.Name = "Text"
+    Text.Parent = Container
+    Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Text.BackgroundTransparency = 1.000
+    Text.BorderSizePixel = 0
+    Text.Position = UDim2.new(0, 7, 0, -6)
+    Text.Size = UDim2.new(0, 60, 0, 22)
+    Text.ZIndex = 3
+    Text.Font = Enum.Font.RobotoMono
+    Text.Text = "exoline"
+    Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Text.TextSize = 14.000
+    Text.TextWrapped = true
+    Text.TextXAlignment = Enum.TextXAlignment.Center
+    
+    Time.Name = "Time"
+    Time.Parent = Container
+    Time.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Time.BackgroundTransparency = 1.000
+    Time.BorderSizePixel = 0
+    Time.Position = UDim2.new(0, 61, 0, -6)
+    Time.Size = UDim2.new(0, 83, 0, 22)
+    Time.ZIndex = 2
+    Time.Font = Enum.Font.RobotoMono
+    Time.Text = "00:00:00"
+    Time.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Time.TextSize = 14.000
+    
+    TextLabel.Name = "|"
+    TextLabel.Parent = Container
+    TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.BackgroundTransparency = 1.000
+    TextLabel.BorderSizePixel = 0
+    TextLabel.Position = UDim2.new(0, 54, 0, -6)
+    TextLabel.Size = UDim2.new(0, 24, 0, 22)
+    TextLabel.ZIndex = 3
+    TextLabel.Font = Enum.Font.RobotoMono
+    TextLabel.Text = "|"
+    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.TextSize = 14.000
+    TextLabel.TextWrapped = true
+    
+    Background.Name = "Background"
+    Background.Parent = ScreenLabel
+    Background.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Background.BorderSizePixel = 0
+    Background.Position = UDim2.new(0, 0, 0.300000012, 0)
+    Background.Size = UDim2.new(0, 0, 0, 2)
+    
+    UIGradient.Parent = Background
+    
+    local function FPRMLZO_fake_script() -- ScreenLabel.timescript 
+    	local script = INST('LocalScript', ScreenLabel)
+    
+    	local ContainerFrame = script.Parent:WaitForChild("Container")
+    	local TimeLabel = ContainerFrame:WaitForChild("Time")
+    	
+    	while wait() do
+    		local seconds = os.date("*t") ["sec"]
+    		local minutes = os.date("*t") ["min"]
+    		local hours = os.date("*t") ["hour"]
+    	
+    		if tonumber(seconds) <= 9 then
+    			seconds = "0"..seconds
+    		end
+    	
+    		if tonumber(minutes) <= 9 then
+    			minutes = "0"..minutes
+    		end
+    	
+    		if tonumber(hours) <= 9 then
+    			hours = "0"..hours
+    		end
+    	
+    		TimeLabel.Text = hours..":"..minutes..":"..seconds
+    	end
+    end
+    coroutine.wrap(FPRMLZO_fake_script)()
+	elseif val == false then
 		GUI.watermark:Destroy()
 	end
 end) 
@@ -358,122 +332,120 @@ end)
 
 local KS = mainSector:AddToggle("Keystrokes", false, function(val)
 if val == true then
-local Keystrokes = Instance.new("ScreenGui")
-local Main = Instance.new("Frame")
-local W = Instance.new("TextLabel")
-local A = Instance.new("TextLabel")
-local S = Instance.new("TextLabel")
-local D = Instance.new("TextLabel")
-
-Keystrokes.Name = "Keystrokes"
-Keystrokes.Parent = GUI
-Keystrokes.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-Main.Name = "Main"
-Main.Parent = Keystrokes
-Main.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Main.BackgroundTransparency = 1.000
-Main.BorderSizePixel = 0
-Main.Position = UDim2.new(0.45694533, 0, 0.776843429, 0)
-Main.Size = UDim2.new(0, 137, 0, 120)
-
-W.Name = "W"
-W.Parent = Main
-W.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-W.BackgroundTransparency = 1.000
-W.Position = UDim2.new(0.457768559, 0, 0.258625597, 0)
-W.Size = UDim2.new(0, 30, 0, 30)
-W.Visible = false
-W.Font = Enum.Font.RobotoMono
-W.Text = "W"
-W.TextColor3 = Color3.fromRGB(255, 255, 255)
-W.TextSize = 14.000
-W.TextWrapped = true
-
-A.Name = "A"
-A.Parent = Main
-A.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-A.BackgroundTransparency = 1.000
-A.Position = UDim2.new(0.238790333, 0, 0.508625627, 0)
-A.Size = UDim2.new(0, 30, 0, 30)
-A.Visible = false
-A.Font = Enum.Font.RobotoMono
-A.Text = "A"
-A.TextColor3 = Color3.fromRGB(255, 255, 255)
-A.TextSize = 14.000
-A.TextWrapped = true
-
-S.Name = "S"
-S.Parent = Main
-S.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-S.BackgroundTransparency = 1.000
-S.Position = UDim2.new(0.457768559, 0, 0.508625686, 0)
-S.Size = UDim2.new(0, 30, 0, 30)
-S.Visible = false
-S.Font = Enum.Font.RobotoMono
-S.Text = "S"
-S.TextColor3 = Color3.fromRGB(255, 255, 255)
-S.TextSize = 14.000
-S.TextWrapped = true
-
-D.Name = "D"
-D.Parent = Main
-D.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-D.BackgroundTransparency = 1.000
-D.Position = UDim2.new(0.676746488, 0, 0.508625627, 0)
-D.Size = UDim2.new(0, 30, 0, 30)
-D.Visible = false
-D.Font = Enum.Font.RobotoMono
-D.Text = "D"
-D.TextColor3 = Color3.fromRGB(255, 255, 255)
-D.TextSize = 14.000
-D.TextWrapped = true
-
-local function RIWJK_fake_script() -- Main.ShowPress 
-	local script = Instance.new('LocalScript', Main)
-
-	local UIS = game:GetService("UserInputService")
-	
-	UIS.InputBegan:Connect(function(key)
-		if key.KeyCode == Enum.KeyCode.W then
-			script.Parent.W.Visible = true
-		else
-			if key.KeyCode == Enum.KeyCode.A then
-				script.Parent.A.Visible = true
-			else
-				if key.KeyCode == Enum.KeyCode.S then
-					script.Parent.S.Visible = true
-				else
-					if key.KeyCode == Enum.KeyCode.D then
-						script.Parent.D.Visible = true
-					end
-				end
-			end
-		end
-	end)
-		
-	UIS.InputEnded:Connect(function(key)
-		if key.KeyCode == Enum.KeyCode.W then
-			script.Parent.W.Visible = false
-		else
-			if key.KeyCode == Enum.KeyCode.A then
-				script.Parent.A.Visible = false
-			else
-				if key.KeyCode == Enum.KeyCode.S then
-					script.Parent.S.Visible = false
-				else
-					if key.KeyCode == Enum.KeyCode.D then
-						script.Parent.D.Visible = false
-					end
-				end
-			end
-		end
-	end)
-end
-coroutine.wrap(RIWJK_fake_script)()
-
-end
-    if val == false then
+    local Keystrokes = INST("ScreenGui")
+    local Main = INST("Frame")
+    local W = INST("TextLabel")
+    local A = INST("TextLabel")
+    local S = INST("TextLabel")
+    local D = INST("TextLabel")
+    
+    Keystrokes.Name = "Keystrokes"
+    Keystrokes.Parent = GUI
+    Keystrokes.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    Main.Name = "Main"
+    Main.Parent = Keystrokes
+    Main.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Main.BackgroundTransparency = 1.000
+    Main.BorderSizePixel = 0
+    Main.Position = UDim2.new(0.45694533, 0, 0.776843429, 0)
+    Main.Size = UDim2.new(0, 137, 0, 120)
+    
+    W.Name = "W"
+    W.Parent = Main
+    W.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    W.BackgroundTransparency = 1.000
+    W.Position = UDim2.new(0.457768559, 0, 0.258625597, 0)
+    W.Size = UDim2.new(0, 30, 0, 30)
+    W.Visible = false
+    W.Font = Enum.Font.RobotoMono
+    W.Text = "W"
+    W.TextColor3 = Color3.fromRGB(255, 255, 255)
+    W.TextSize = 14.000
+    W.TextWrapped = true
+    
+    A.Name = "A"
+    A.Parent = Main
+    A.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    A.BackgroundTransparency = 1.000
+    A.Position = UDim2.new(0.238790333, 0, 0.508625627, 0)
+    A.Size = UDim2.new(0, 30, 0, 30)
+    A.Visible = false
+    A.Font = Enum.Font.RobotoMono
+    A.Text = "A"
+    A.TextColor3 = Color3.fromRGB(255, 255, 255)
+    A.TextSize = 14.000
+    A.TextWrapped = true
+    
+    S.Name = "S"
+    S.Parent = Main
+    S.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    S.BackgroundTransparency = 1.000
+    S.Position = UDim2.new(0.457768559, 0, 0.508625686, 0)
+    S.Size = UDim2.new(0, 30, 0, 30)
+    S.Visible = false
+    S.Font = Enum.Font.RobotoMono
+    S.Text = "S"
+    S.TextColor3 = Color3.fromRGB(255, 255, 255)
+    S.TextSize = 14.000
+    S.TextWrapped = true
+    
+    D.Name = "D"
+    D.Parent = Main
+    D.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    D.BackgroundTransparency = 1.000
+    D.Position = UDim2.new(0.676746488, 0, 0.508625627, 0)
+    D.Size = UDim2.new(0, 30, 0, 30)
+    D.Visible = false
+    D.Font = Enum.Font.RobotoMono
+    D.Text = "D"
+    D.TextColor3 = Color3.fromRGB(255, 255, 255)
+    D.TextSize = 14.000
+    D.TextWrapped = true
+    
+    local function RIWJK_fake_script() -- Main.ShowPress 
+    	local script = INST('LocalScript', Main)
+    
+    	local UIS = game:GetService("UserInputService")
+    	
+    	UIS.InputBegan:Connect(function(key)
+    		if key.KeyCode == Enum.KeyCode.W then
+    			script.Parent.W.Visible = true
+    		else
+    			if key.KeyCode == Enum.KeyCode.A then
+    				script.Parent.A.Visible = true
+    			else
+    				if key.KeyCode == Enum.KeyCode.S then
+    					script.Parent.S.Visible = true
+    				else
+    					if key.KeyCode == Enum.KeyCode.D then
+    						script.Parent.D.Visible = true
+    					end
+    				end
+    			end
+    		end
+    	end)
+    		
+    	UIS.InputEnded:Connect(function(key)
+    		if key.KeyCode == Enum.KeyCode.W then
+    			script.Parent.W.Visible = false
+    		else
+    			if key.KeyCode == Enum.KeyCode.A then
+    				script.Parent.A.Visible = false
+    			else
+    				if key.KeyCode == Enum.KeyCode.S then
+    					script.Parent.S.Visible = false
+    				else
+    					if key.KeyCode == Enum.KeyCode.D then
+    						script.Parent.D.Visible = false
+    					end
+    				end
+    			end
+    		end
+    	end)
+    end
+    coroutine.wrap(RIWJK_fake_script)()
+    elseif val == false then
         GUI.Keystrokes:Destroy()
     end
 end)
@@ -489,32 +461,30 @@ local PL = mainSector:AddToggle("Player Trail", false, function(val)
     if val == true then
         PlayerTrail = game:GetService("RunService").RenderStepped:Connect(function()
             pcall(function()
-                local player = game:GetService("Players").LocalPlayer
-                local LFoot = Instance.new("Attachment",player.Character.LeftFoot)
-                local RFoot = Instance.new("Attachment",player.Character.RightFoot)
-                local Trail = Instance.new("Trail")
+                local LFoot = INST("Attachment",client.Character.LeftFoot)
+                local RFoot = INST("Attachment",client.Character.RightFoot)
+                local Trail = INST("Trail")
                 Trail.Attachment0 = LFoot
                 Trail.Attachment1 = RFoot
                 Trail.Lifetime = 3
                 Trail.Parent = LFoot.Parent
-                Trail.Color3 = Color3.new(255,1,1)
+                Trail.Color3 = Color3.new(255,255,255)
             end)
         end)
-    end
-    if val == false then
+    elseif val == false then
         PlayerTrail:Disconnect()
     end
 end)
 
 local PLCP = PL:AddColorpicker(Color3.new(1,1,1), function(val)
-    Trail.Color = val
+    Trail.Color3 = val
 end)
 
 local Toggle = mainSector:AddToggle("Old Sounds", false, function(val)
 if val == true then
     OldSounds = game:GetService("RunService").RenderStepped:Connect(function()
         pcall(function()
-    		local player = game:GetService("Players").LocalPlayer.Character
+    		local player = client.Character
     		if player.EquippedTool.Value == "AK47" then
     			player.Gun.Shoot.SoundId = "rbxassetid://1112730119"
     		end
@@ -536,6 +506,10 @@ if val == true then
     			player.Gun.SShoot.SoundId = "rbxassetid://1112952739"
     			player.Gun.Shoot.SoundId = "rbxassetid://2515499360"
     		end
+    		
+    	    if player.EquippedTool.Value == "P2000" then
+			player.Gun.Shoot.SoundId = "rbxassetid://263589107"
+		    end
     
     		if player.EquippedTool.Value == "P250" then
     			player.Gun.Shoot.SoundId = "rbxassetid://340365431"
@@ -586,8 +560,7 @@ if val == true then
           	    end
             end)
         end)
-    end
-    if val == false then
+    elseif val == false then
         OldSounds:Disconnect()
     end
 end)

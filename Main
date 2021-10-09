@@ -361,6 +361,7 @@ W.Font = Enum.Font.RobotoMono
 W.Text = "W"
 W.TextColor3 = Color3.fromRGB(255, 255, 255)
 W.TextSize = 14.000
+W.TextWrapped = true
 
 A.Name = "A"
 A.Parent = Main
@@ -373,6 +374,7 @@ A.Font = Enum.Font.RobotoMono
 A.Text = "A"
 A.TextColor3 = Color3.fromRGB(255, 255, 255)
 A.TextSize = 14.000
+A.TextWrapped = true
 
 S.Name = "S"
 S.Parent = Main
@@ -385,6 +387,7 @@ S.Font = Enum.Font.RobotoMono
 S.Text = "S"
 S.TextColor3 = Color3.fromRGB(255, 255, 255)
 S.TextSize = 14.000
+S.TextWrapped = true
 
 D.Name = "D"
 D.Parent = Main
@@ -397,6 +400,7 @@ D.Font = Enum.Font.RobotoMono
 D.Text = "D"
 D.TextColor3 = Color3.fromRGB(255, 255, 255)
 D.TextSize = 14.000
+D.TextWrapped = true
 
 local function RIWJK_fake_script() -- Main.ShowPress 
 	local script = Instance.new('LocalScript', Main)

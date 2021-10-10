@@ -513,29 +513,6 @@ local KSCP = KS:AddColorpicker(Color3.new(1,1,1), function(val)
     GUI.Keystrokes.Main.D.TextColor3 = val
 end)
 
-local PL = mainSector:AddToggle("Player Trail", false, function(val)
-    if val == true then
-        PlayerTrail = game:GetService("RunService").RenderStepped:Connect(function()
-            pcall(function()
-                local LFoot = INST("Attachment",client.Character.LeftFoot)
-                local RFoot = INST("Attachment",client.Character.RightFoot)
-                local Trail = INST("Trail")
-                Trail.Attachment0 = LFoot
-                Trail.Attachment1 = RFoot
-                Trail.Lifetime = 3
-                Trail.Parent = LFoot.Parent
-                Trail.Color3 = Color3.new(255,255,255)
-            end)
-        end)
-    elseif val == false then
-        PlayerTrail:Disconnect()
-    end
-end)
-
-local PLCP = PL:AddColorpicker(Color3.new(1,1,1), function(val)
-    Trail.Color3 = val
-end)
-
 mainSector:AddToggle("Old Sounds", false, function(val)
 if val == true then
     OldSounds = game:GetService("RunService").RenderStepped:Connect(function()

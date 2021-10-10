@@ -1,5 +1,4 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/UILibrary", true))()
-local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/ESP", true))()
 ------------------------------------------------------------------------------------------
 library.theme = {
     fontsize = 15,
@@ -31,81 +30,60 @@ local CCE = INST("ColorCorrectionEffect", Camera)
 local player = game:GetService("Players").LocalPlayer.Character
 local client = game:GetService("Players").LocalPlayer
 ------------------------------------------------------------------------------------------
-local exoline = library:CreateWindow("exoline", Vector2.new(435, 450), Enum.KeyCode.Insert)
+local exoline = library:CreateWindow("exoline", Vector2.new(460, 530), Enum.KeyCode.Insert)
 ------------------------------------------------------------------------------------------
+local AimbotTab = exoline:CreateTab("Aimbot")
 local VisualsTab = exoline:CreateTab("Visuals")
 local MiscTab = exoline:CreateTab("Misc")
 local SettingsTab = exoline:CreateTab("Settings")
 ------------------------------------------------------------------------------------------
-local MenuSector = SettingsTab:CreateSector("Menu", "right")
-local ConfigSector = SettingsTab:CreateSector("Configs", "left")
-local ExtraSector = SettingsTab:CreateSector("Extra", "left")
-local CreditsSector = SettingsTab:CreateSector("Credits", "right")
+local AimbotTabSectorMain = AimbotTab:CreateSector("Main")
 ------------------------------------------------------------------------------------------
-local mainSector = MiscTab:CreateSector("Main", "left")
-local SkinsSector = MiscTab:CreateSector("Skins", "right")
-local NoclipSector = MiscTab:CreateSector("Noclip", "right")
+local SettingsTabMenuSector = SettingsTab:CreateSector("Menu", "left")
+local SettingsTabExtraSector = SettingsTab:CreateSector("Extra", "left")
+local SettingsTabCreditsSector = SettingsTab:CreateSector("Credits", "right")
 ------------------------------------------------------------------------------------------
-local WorldSector = VisualsTab:CreateSector("World", "left")
-local ViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
-local VMColorsSector = VisualsTab:CreateSector("Viewmodel Colors", "left")
+local MiscTabMainSector = MiscTab:CreateSector("Main", "left")
+local MiscTabSkinsSector = MiscTab:CreateSector("Skins", "right")
+local MiscTabNoclipSector = MiscTab:CreateSector("Noclip", "right")
 ------------------------------------------------------------------------------------------
-ConfigSector:AddLabel("Config Name")
-
-ConfigSector:AddTextbox("", "", function(val)
-    print("Textbox", val)
-end)
-
-ConfigSector:AddDropdown("Select Config", {"Config 1", "Config 3", "Config 4", "Config 5", "Config 6", }, "-", function(val)
-    print("Dropdown", val)
-end)
-
-ConfigSector:AddButton("Create", function() 
-    print("Created Config")
-end)
-
-ConfigSector:AddButton("Save", function() 
-    print("Saved Config")
-end)
-
-ConfigSector:AddButton("Load", function() 
-    print("Loaded Config")
-end)
-
-ConfigSector:AddButton("Delete", function() 
-    print("Deleted Config")
+local VisualsTabWorldSector = VisualsTab:CreateSector("World", "left")
+local VisualsTabViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
+local VisualsTabVMColorsSector = VisualsTab:CreateSector("Viewmodel Colors", "left")
+------------------------------------------------------------------------------------------
+AimbotTabSectorMain:AddToggle("Enabled", false, function(val)
 end)
 ------------------------------------------------------------------------------------------
-MenuSector:AddLabel("Menu Name")
-MenuSector:AddTextbox("", "exoline", function(val)
+SettingsTabMenuSector:AddLabel("Menu Name")
+SettingsTabMenuSector:AddTextbox("", "exoline", function(val)
     GUI.exoline.main.top.title.Text = val
 end)
 
-MenuSector:AddLabel("Watermark Name")
-MenuSector:AddTextbox("", "exoline", function(val)
+SettingsTabMenuSector:AddLabel("Watermark Name")
+SettingsTabMenuSector:AddTextbox("", "exoline", function(val)
     GUI.watermark.ScreenLabel.Container.Text.Text = val
 end)
 
-ExtraSector:AddButton("Rejoin", function(val)
-    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
-end)
+SettingsTabExtraSector:AddButton("Rejoin", function(val)
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+    end)
 
-ExtraSector:AddButton("Copy Game Invite", function(val)
+SettingsTabExtraSector:AddButton("Copy Game Invite", function(val)
     setclipboard("Roblox.GameLauncher.joinGameInstance("..game.PlaceId..", '"..game.JobId.."')")
 end)
 ------------------------------------------------------------------------------------------
-CreditsSector:AddLabel("Script - zeox#8534")
-CreditsSector:AddLabel("UI Library - Bad#9672")
-CreditsSector:AddLabel("")
-CreditsSector:AddLabel("Specical Thanks To:")
-CreditsSector:AddLabel("Bad#9672")
-CreditsSector:AddLabel("PracticalJoke#5840")
+SettingsTabCreditsSector:AddLabel("Script - zeox#8534")
+SettingsTabCreditsSector:AddLabel("UI Library - Modified uwuware")
+SettingsTabCreditsSector:AddLabel("")
+SettingsTabCreditsSector:AddLabel("Specical Thanks To:")
+SettingsTabCreditsSector:AddLabel("Bad#9672")
+SettingsTabCreditsSector:AddLabel("PracticalJoke#5840")
 ------------------------------------------------------------------------------------------
-SkinsSector:AddButton("Unlock All", function()
+MiscTabSkinsSector:AddButton("Unlock All", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NineR-9R/NineRs-Skin-Unlocker/main/Skin-Unlocker.lua"))()
 end)
 
-mainSector:AddDropdown("Waypoints Teleport", {"Spawn T", "Spawn CT", "Bombsite A", "Bombsite B"}, "-", function(val)
+MiscTabMainSector:AddDropdown("Waypoints Teleport", {"Spawn T", "Spawn CT", "Bombsite A", "Bombsite B"}, "-", function(val)
 	if val == "Spawn T" then
 		client.Character.HumanoidRootPart.CFrame = CFrame.new(workspace.Map.SpawnPoints["BuyArea"].Position + Vector3.new(0, 3, 0))
 	elseif val == "Spawn CT" then
@@ -117,7 +95,7 @@ mainSector:AddDropdown("Waypoints Teleport", {"Spawn T", "Spawn CT", "Bombsite A
 	end
 end)
 
-mainSector:AddDropdown("Places Teleport", {"Casual", "Competitive", "Deathmatch", "Trading", }, "-", function(val)
+MiscTabMainSector:AddDropdown("Places Teleport", {"Casual", "Competitive", "Deathmatch", "Trading", }, "-", function(val)
     	if val == "Casual" then
 		game:GetService("TeleportService"):Teleport(301549746, client)
 	elseif val == "Competitive" then
@@ -129,7 +107,7 @@ mainSector:AddDropdown("Places Teleport", {"Casual", "Competitive", "Deathmatch"
 	end
 end)
 
-mainSector:AddDropdown("Play Sound", {"Planted", "Defused", "CT Win", "T Win", "TTT a", "TTT b", "Beep", "Explosion", "Rescued", "Becky", }, "-", function(val)
+MiscTabMainSector:AddDropdown("Play Sound", {"Planted", "Defused", "CT Win", "T Win", "TTT a", "TTT b", "Beep", "Explosion", "Rescued", "Becky", }, "-", function(val)
     	if val == "Planted" then
 		workspace.Sounds.Arm:Play()
 	elseif val == "Defused" then
@@ -153,7 +131,7 @@ mainSector:AddDropdown("Play Sound", {"Planted", "Defused", "CT Win", "T Win", "
 	end
 end)
 
-local SL = mainSector:AddToggle("Spectator List", false, function(val)
+local SL = MiscTabMainSector:AddToggle("Spectator List", false, function(val)
 if val == true then 
     local SpectatorsList = INST("ScreenGui")
     local Frame = INST("Frame")
@@ -279,7 +257,7 @@ local SLCP = SL:AddColorpicker(Color3.new(1,1,1), function(val)
     GUI.SpectatorsList.Frame["List Text"].BorderColor3 = val
 end)
 
-local WM = mainSector:AddToggle("Watermark", false, function(val)
+local WM = MiscTabMainSector:AddToggle("Watermark", false, function(val)
 if val == true then
     local watermark = INST("ScreenGui")
     local ScreenLabel = INST("Frame")
@@ -399,7 +377,7 @@ local WMCP = WM:AddColorpicker(Color3.new(1,1,1), function(val)
     GUI.watermark.ScreenLabel.BorderColor3 = val
 end)
 
-local KS = mainSector:AddToggle("Keystrokes", false, function(val)
+local KS = MiscTabMainSector:AddToggle("Keystrokes", false, function(val)
 if val == true then
     local Keystrokes = INST("ScreenGui")
     local Main = INST("Frame")
@@ -526,7 +504,7 @@ local KSCP = KS:AddColorpicker(Color3.new(1,1,1), function(val)
     GUI.Keystrokes.Main.D.TextColor3 = val
 end)
 
-mainSector:AddToggle("Old Sounds", false, function(val)
+MiscTabMainSector:AddToggle("Old Sounds", false, function(val)
 if val == true then
     OldSounds = game:GetService("RunService").RenderStepped:Connect(function()
         pcall(function()
@@ -611,7 +589,7 @@ if val == true then
     end
 end)
 
-mainSector:AddToggle("Kill All", false, function(val)
+MiscTabMainSector:AddToggle("Kill All", false, function(val)
 if val == true then
 	    KillAllLoop = game:GetService("RunService").RenderStepped:Connect(function()
 		pcall(function()
@@ -641,7 +619,7 @@ if val == true then
 end)
 
 ------------------------------------------------------------------------------------------
-local NoclipEnabled = NoclipSector:AddToggle("Enabled", false, function(val)
+local NoclipEnabled = MiscTabNoclipSector:AddToggle("Enabled", false, function(val)
 	if val == true then
 		NoclipLoop = game:GetService("RunService").Stepped:Connect(function()
 			for i,v in pairs(client.Character:GetChildren()) do
@@ -654,55 +632,52 @@ local NoclipEnabled = NoclipSector:AddToggle("Enabled", false, function(val)
 		NoclipLoop:Disconnect()
 	end
 end)
-
 ------------------------------------------------------------------------------------------
-loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
-------------------------------------------------------------------------------------------
-ViewmodelSector:AddToggle("Enabled", false, function(val)
+VisualsTabViewmodelSector:AddToggle("Enabled", false, function(val)
     ViewmodelEnabled = val
 end)
 
-ViewmodelSector:AddSlider("Offset X", 0, 180, 360, 1, "", function(val)
+VisualsTabViewmodelSector:AddSlider("X Offset", 0, 180, 360, 1, "", function(val)
     ViewmodelX = val
 end)
 
-ViewmodelSector:AddSlider("Offset Y", 0, 180, 360, 1, "", function(val)
+VisualsTabViewmodelSector:AddSlider("Y Offset", 0, 180, 360, 1, "", function(val)
     ViewmodelY = val
 end)
 
-ViewmodelSector:AddSlider("Offset Z", 0, 180, 360, 1, "", function(val)
+VisualsTabViewmodelSector:AddSlider("Z Offset", 0, 180, 360, 1, "", function(val)
     ViewmodelZ = val
 end)
 ------------------------------------------------------------------------------------------
-WorldSector:AddSlider("Saturation", 0, 0, 3, 1, "", function(val)
+VisualsTabWorldSector:AddSlider("Saturation", 0, 0, 3, 1, "", function(val)
     CCE.Saturation = val
 end)
 
-WorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, "", function(val)
+VisualsTabWorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, "", function(val)
     Lighting.TimeOfDay = val
 end)
 
-WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
+VisualsTabWorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
     CCE.TintColor = val
 end)
 ------------------------------------------------------------------------------------------
-VMColorsSector:AddToggle("Enabled", false, function(val)
+VisualsTabVMColorsSector:AddToggle("Enabled", false, function(val)
     ArmsColorsEnabled = val
 end)
 
-VMColorsSector:AddColorpicker("Arms Color", Color3.new(1,1,1), function(val) 
+VisualsTabVMColorsSector:AddColorpicker("Arms Color", Color3.new(1,1,1), function(val) 
     ArmsColorsColor = val
 end)
 
-VMColorsSector:AddSlider("Arms Transparency", 0, 0, 100, 1, "", function(val)
+VisualsTabVMColorsSector:AddSlider("Arms Transparency", 0, 0, 100, 1, "", function(val)
     ArmsColorsTransparency = val/100
 end)
 
-VMColorsSector:AddColorpicker("Weapons Color", Color3.new(1,1,1), function(val)
+VisualsTabVMColorsSector:AddColorpicker("Weapons Color", Color3.new(1,1,1), function(val)
     ArmsColorsWeaponsColor = val
 end)
 
-VMColorsSector:AddSlider("Weapons Transparency", 0, 0, 100, 1, "", function(val)
+VisualsTabVMColorsSector:AddSlider("Weapons Transparency", 0, 0, 100, 1, "", function(val)
     ArmsColorsWeaponsTransparency = val/100
 end)
 -------------------------------------------------------------------------------------

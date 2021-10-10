@@ -25,10 +25,11 @@ library.theme = {
 local INST = Instance.new
 local Lighting = game:GetService("Lighting")
 local GUI = game.CoreGui
-local Camera = game.workspace.CurrentCamera
+local workspace = game:GetService("Workspace")
+local Camera = workspace.CurrentCamera
 local CCE = INST("ColorCorrectionEffect", Camera)
 local player = game:GetService("Players").LocalPlayer.Character
-local client = game.Players.LocalPlayer
+local client = game:GetService("Players").LocalPlayer
 ------------------------------------------------------------------------------------------
 local exoline = library:CreateWindow("exoline", Vector2.new(435, 450), Enum.KeyCode.Insert)
 ------------------------------------------------------------------------------------------
@@ -42,43 +43,9 @@ local ConfigSector = SettingsTab:CreateSector("Configs", "left")
 local mainSector = MiscTab:CreateSector("Main", "left")
 local SkinsSector = MiscTab:CreateSector("Skins", "right")
 ------------------------------------------------------------------------------------------
-local ESPSector = VisualsTab:CreateSector("ESP", "left")
 local WorldSector = VisualsTab:CreateSector("World", "left")
 local ViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
-------------------------------------------------------------------------------------------
-ESPSector:AddToggle("Enabled", false, function(val)
-    ESP.Enabled = val
-end)
-
-ESPSector:AddToggle("Info", false, function(val)
-    ESP.ShowInfo = val
-end)
-
-ESPSector:AddToggle("Tracers", false, function(val)
-    ESP.Tracers = val
-end)
-
-ESPSector:AddToggle("Boxes", false, function(val)
-    ESP.Boxes = val
-end)
-
-ESPSector:AddToggle("Show Team", false, function(val)
-    ESP.ShowTeam = val
-end)
-
-ESPSector:AddToggle("Use Team Color", false, function(val)
-    ESP.UseTeamColor = val
-end)
-
-
-ESPSector:AddColorpicker("Team Color", Color3.new(1,1,1), function(val)
-    ESP.TeamColor = val
-end)
-
-ESPSector:AddColorpicker("Enemy Color", Color3.new(1,1,1), function(val)
-    ESP.EnemyColor = val
-end)
-
+local VMColorsSector = VisualsTab:CreateSector("Viewmodel Colors", "left")
 ------------------------------------------------------------------------------------------
 ConfigSector:AddLabel("Config Name")
 
@@ -118,6 +85,42 @@ end)
 ------------------------------------------------------------------------------------------
 SkinsSector:AddButton("Unlock All", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NineR-9R/NineRs-Skin-Unlocker/main/Skin-Unlocker.lua"))()
+end)
+
+mainSector:AddDropdown("Places Teleport", {"Casual", "Competitive", "Deathmatch", "Trading", }, "", function(val)
+    	if val == "Casual" then
+		game:GetService("TeleportService"):Teleport(301549746, client)
+	elseif val == "Competitive" then
+		game:GetService("TeleportService"):Teleport(1480424328, client)
+	elseif val == "Deathmatch" then
+		game:GetService("TeleportService"):Teleport(1869597719, client)
+	elseif val == "Trading" then
+        game:GetService("TeleportService"):Teleport(5325113759, client)
+	end
+end)
+
+mainSector:AddDropdown("Play Sound", {"Planted", "Becky", "Beep", "CT Win", "T Win", "Explosion", "Rescued", "Defused", "TTT a", "TTT b" }, "", function(val)
+    	if val == "Planted" then
+		workspace.Sounds.Arm:Play()
+	elseif val == "Becky" then
+		workspace.Sounds.Becky:Play()
+	elseif val == "Beep" then
+		workspace.Sounds.Beep:Play()
+	elseif val == "CT Win" then
+        workspace.Sounds.CT:Play()
+	elseif val == "T Win" then
+        workspace.Sounds.T:Play()
+	elseif val == "Explosion" then
+        workspace.Sounds.Explosion:Play()
+	elseif val == "Rescued" then
+        workspace.Sounds.Rescue:Play()
+	elseif val == "Defused" then
+        workspace.Sounds.Defuse:Play()
+    elseif val == "TTT a" then
+        workspace.RoundEnd:Play()
+   elseif val == "TTT b" then
+        workspace.RoundStart:Play()
+	end
 end)
 
 local SL = mainSector:AddToggle("Spectator List", false, function(val)
@@ -600,7 +603,6 @@ if val == true then
         OldSounds:Disconnect()
     end
 end)
-
 ------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
 ------------------------------------------------------------------------------------------
@@ -632,6 +634,26 @@ WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val)
     CCE.TintColor = val
 end)
 ------------------------------------------------------------------------------------------
+VMColorsSector:AddToggle("Enabled", false, function(val)
+    ArmsColorsEnabled = val
+end)
+
+VMColorsSector:AddColorpicker("Arms Color", Color3.new(1,1,1), function(val) 
+    ArmsColorsColor = val
+end)
+
+VMColorsSector:AddSlider("Arms Transparency", 0, 0, 100, 1, "", function(val)
+    ArmsColorsTransparency = val/100
+end)
+
+VMColorsSector:AddColorpicker("Weapons Color", Color3.new(1,1,1), function(val)
+    ArmsColorsWeaponsColor = val
+end)
+
+VMColorsSector:AddSlider("Weapons Transparency", 0, 0, 100, 1, "", function(val)
+    ArmsColorsWeaponsTransparency = val/100
+end)
+------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
 ------------------------------------------------------------------------------------------
 local mt = getrawmetatable(game)
@@ -654,5 +676,74 @@ mt.__namecall = newcclosure(function(self, ...)
 		end
 	end
     return oldNamecall(self, unpack(args))
+end)
+------------------------------------------------------------------------------------------
+Camera.ChildAdded:Connect(function(ViewmodelFolder)
+	spawn(function()
+		if ViewmodelFolder.Name == 'Arms' and ArmsColorsEnabled == true then
+			for i,v in pairs(ViewmodelFolder:GetChildren()) do
+				if v:IsA("Model") and v:FindFirstChild("Left Arm") and v:FindFirstChild("Right Arm") then
+					local RightArm = v["Right Arm"]
+					local LeftArm = v["Left Arm"]
+					local RightGlove = RightArm:FindFirstChild("Glove") or RightArm:FindFirstChild("RGlove")
+					local LeftGlove = LeftArm:FindFirstChild("Glove") or LeftArm:FindFirstChild("LGlove")
+					local RightSleeve = RightArm:FindFirstChild("Sleeve") or nil
+					local LeftSleeve = LeftArm:FindFirstChild("Sleeve") or nil
+					
+					RightArm.Transparency = ArmsColorsTransparency
+					RightArm.Reflectance = 0
+					RightArm.Mesh.TextureId = ""
+					RightArm.Color = ArmsColorsColor
+					RightArm.Material = "Neon"
+					
+					LeftArm.Transparency = ArmsColorsTransparency
+					LeftArm.Reflectance = 0
+					LeftArm.Mesh.TextureId = ""
+					LeftArm.Color = ArmsColorsColor
+					LeftArm.Material = "Neon"
+					
+					RightGlove.Transparency = ArmsColorsTransparency
+					RightGlove.Reflectance = 0
+					RightGlove.Mesh.TextureId = ""
+					RightGlove.Color = ArmsColorsColor
+					RightGlove.Material = "Neon"
+					
+					LeftGlove.Transparency = ArmsColorsTransparency
+					LeftGlove.Reflectance = 0
+					LeftGlove.Mesh.TextureId = ""
+					LeftGlove.Color = ArmsColorsColor
+					LeftGlove.Material = "Neon"
+					
+					if RightSleeve and LeftSleeve then
+					
+					RightSleeve.Transparency = ArmsColorsTransparency
+					RightSleeve.Reflectance = 0
+					RightSleeve.Mesh.TextureId = ""
+					RightSleeve.Color = ArmsColorsColor
+					RightSleeve.Material = "Neon"
+					
+					LeftSleeve.Transparency = ArmsColorsTransparency
+					LeftSleeve.Reflectance = 0
+					LeftSleeve.Mesh.TextureId = ""
+					LeftSleeve.Color = ArmsColorsColor
+					LeftSleeve.Material = "Neon"
+					
+					end
+				end
+				if v:IsA("BasePart") and v.Name ~= ("Right Arm" or "Left Arm" or "Flash") and v.Transparency~=1 then -- Weapons Pointer
+					local Weapons = v
+					
+					if Weapons:IsA("MeshPart") then Weapons.TextureID = "" end
+					if Weapons:FindFirstChildOfClass("SpecialMesh") then Weapons:FindFirstChildOfClass("SpecialMesh").TextureId = "" end
+					
+					Weapons.Transparency = ArmsColorsWeaponsTransparency
+					Weapons.Reflectance = 0
+					Weapons.Color = ArmsColorsWeaponsColor
+					Weapons.Material = "ForceField"
+					
+				end
+			end
+		end
+	end)
 end)
 ------------------------------------------------------------------------------------------

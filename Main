@@ -1,4 +1,5 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/UILibrary", true))()
+local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/ESP", true))()
 ------------------------------------------------------------------------------------------
 library.theme = {
     fontsize = 15,
@@ -41,46 +42,81 @@ local ConfigSector = SettingsTab:CreateSector("Configs", "left")
 local mainSector = MiscTab:CreateSector("Main", "left")
 local SkinsSector = MiscTab:CreateSector("Skins", "right")
 ------------------------------------------------------------------------------------------
+local ESPSector = VisualsTab:CreateSector("ESP", "left")
 local WorldSector = VisualsTab:CreateSector("World", "left")
 local ViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
 ------------------------------------------------------------------------------------------
-local ConfigName = ConfigSector:AddLabel("Config Name")
+ESPSector:AddToggle("Enabled", false, function(val)
+    ESP.Enabled = val
+end)
 
-local Textbox = ConfigSector:AddTextbox("", "", function(val)
+ESPSector:AddToggle("Info", false, function(val)
+    ESP.ShowInfo = val
+end)
+
+ESPSector:AddToggle("Tracers", false, function(val)
+    ESP.Tracers = val
+end)
+
+ESPSector:AddToggle("Boxes", false, function(val)
+    ESP.Boxes = val
+end)
+
+ESPSector:AddToggle("Show Team", false, function(val)
+    ESP.ShowTeam = val
+end)
+
+ESPSector:AddToggle("Use Team Color", false, function(val)
+    ESP.UseTeamColor = val
+end)
+
+
+ESPSector:AddColorpicker("Team Color", Color3.new(1,1,1), function(val)
+    ESP.TeamColor = val
+end)
+
+ESPSector:AddColorpicker("Enemy Color", Color3.new(1,1,1), function(val)
+    ESP.EnemyColor = val
+end)
+
+------------------------------------------------------------------------------------------
+ConfigSector:AddLabel("Config Name")
+
+ConfigSector:AddTextbox("", "", function(val)
     print("Textbox", val)
 end)
 
-local Dropdown = ConfigSector:AddDropdown("Select Config", {"Config 1", "Config 3", "Config 4", "Config 5", "Config 6", }, "", function(val)
+ConfigSector:AddDropdown("Select Config", {"Config 1", "Config 3", "Config 4", "Config 5", "Config 6", }, "", function(val)
     print("Dropdown", val)
 end)
 
-local Button = ConfigSector:AddButton("Create", function() 
+ConfigSector:AddButton("Create", function() 
     print("Created Config")
 end)
 
-local Button = ConfigSector:AddButton("Save", function() 
+ConfigSector:AddButton("Save", function() 
     print("Saved Config")
 end)
 
-local Button = ConfigSector:AddButton("Load", function() 
+ConfigSector:AddButton("Load", function() 
     print("Loaded Config")
 end)
 
-local Button = ConfigSector:AddButton("Delete", function() 
+ConfigSector:AddButton("Delete", function() 
     print("Deleted Config")
 end)
 ------------------------------------------------------------------------------------------
-local Label = MenuSector:AddLabel("Menu Name")
-local Textbox = MenuSector:AddTextbox("", "exoline", function(val)
+MenuSector:AddLabel("Menu Name")
+MenuSector:AddTextbox("", "exoline", function(val)
     GUI.exoline.main.top.title.Text = val
 end)
 
-local Label = MenuSector:AddLabel("Watermark Name")
-local Textbox = MenuSector:AddTextbox("", "exoline", function(val)
+MenuSector:AddLabel("Watermark Name")
+MenuSector:AddTextbox("", "exoline", function(val)
     GUI.watermark.ScreenLabel.Container.Text.Text = val
 end)
 ------------------------------------------------------------------------------------------
-local Button = SkinsSector:AddButton("Unlock All", function()
+SkinsSector:AddButton("Unlock All", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NineR-9R/NineRs-Skin-Unlocker/main/Skin-Unlocker.lua"))()
 end)
 
@@ -480,7 +516,7 @@ local PLCP = PL:AddColorpicker(Color3.new(1,1,1), function(val)
     Trail.Color3 = val
 end)
 
-local Toggle = mainSector:AddToggle("Old Sounds", false, function(val)
+mainSector:AddToggle("Old Sounds", false, function(val)
 if val == true then
     OldSounds = game:GetService("RunService").RenderStepped:Connect(function()
         pcall(function()
@@ -568,31 +604,31 @@ end)
 ------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
 ------------------------------------------------------------------------------------------
-local Toggle = ViewmodelSector:AddToggle("Enabled", false, function(val)
+ViewmodelSector:AddToggle("Enabled", false, function(val)
     ViewmodelEnabled = val
 end)
 
-local Slider = ViewmodelSector:AddSlider("Offset X", 0, 180, 360, 1, "", function(val)
+ViewmodelSector:AddSlider("Offset X", 0, 180, 360, 1, "", function(val)
     ViewmodelX = val
 end)
 
-local Slider = ViewmodelSector:AddSlider("Offset Y", 0, 180, 360, 1, "", function(val)
+ViewmodelSector:AddSlider("Offset Y", 0, 180, 360, 1, "", function(val)
     ViewmodelY = val
 end)
 
-local Slider = ViewmodelSector:AddSlider("Offset Z", 0, 180, 360, 1, "", function(val)
+ViewmodelSector:AddSlider("Offset Z", 0, 180, 360, 1, "", function(val)
     ViewmodelZ = val
 end)
 ------------------------------------------------------------------------------------------
-local Slider = WorldSector:AddSlider("Saturation", 0, 0, 3, 1, "", function(val)
+WorldSector:AddSlider("Saturation", 0, 0, 3, 1, "", function(val)
     CCE.Saturation = val
 end)
 
-local Slider = WorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, "", function(val)
+WorldSector:AddSlider("Time Of Day", 0, 10, 20, 1, "", function(val)
     Lighting.TimeOfDay = val
 end)
 
-local ColorPicker = WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
+WorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
     CCE.TintColor = val
 end)
 ------------------------------------------------------------------------------------------

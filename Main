@@ -39,6 +39,8 @@ local SettingsTab = exoline:CreateTab("Settings")
 ------------------------------------------------------------------------------------------
 local MenuSector = SettingsTab:CreateSector("Menu", "right")
 local ConfigSector = SettingsTab:CreateSector("Configs", "left")
+local ExtraSector = SettingsTab:CreateSector("Extra", "left")
+local CreditsSector = SettingsTab:CreateSector("Credits", "right")
 ------------------------------------------------------------------------------------------
 local mainSector = MiscTab:CreateSector("Main", "left")
 local SkinsSector = MiscTab:CreateSector("Skins", "right")
@@ -53,7 +55,7 @@ ConfigSector:AddTextbox("", "", function(val)
     print("Textbox", val)
 end)
 
-ConfigSector:AddDropdown("Select Config", {"Config 1", "Config 3", "Config 4", "Config 5", "Config 6", }, "", function(val)
+ConfigSector:AddDropdown("Select Config", {"Config 1", "Config 3", "Config 4", "Config 5", "Config 6", }, "-", function(val)
     print("Dropdown", val)
 end)
 
@@ -82,12 +84,27 @@ MenuSector:AddLabel("Watermark Name")
 MenuSector:AddTextbox("", "exoline", function(val)
     GUI.watermark.ScreenLabel.Container.Text.Text = val
 end)
+
+ExtraSector:AddButton("Rejoin", function(val)
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+end)
+
+ExtraSector:AddButton("Copy Game Invite", function(val)
+    setclipboard("Roblox.GameLauncher.joinGameInstance("..game.PlaceId..", '"..game.JobId.."')")
+end)
+------------------------------------------------------------------------------------------
+CreditsSector:AddLabel("Script - zeox#8534")
+CreditsSector:AddLabel("UI Library - Bad#9672")
+CreditsSector:AddLabel("")
+CreditsSector:AddLabel("Specical Thanks To:")
+CreditsSector:AddLabel("Bad#9672")
+CreditsSector:AddLabel("PracticalJoke#5840")
 ------------------------------------------------------------------------------------------
 SkinsSector:AddButton("Unlock All", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NineR-9R/NineRs-Skin-Unlocker/main/Skin-Unlocker.lua"))()
 end)
 
-mainSector:AddDropdown("Places Teleport", {"Casual", "Competitive", "Deathmatch", "Trading", }, "", function(val)
+mainSector:AddDropdown("Places Teleport", {"Casual", "Competitive", "Deathmatch", "Trading", }, "-", function(val)
     	if val == "Casual" then
 		game:GetService("TeleportService"):Teleport(301549746, client)
 	elseif val == "Competitive" then
@@ -99,27 +116,27 @@ mainSector:AddDropdown("Places Teleport", {"Casual", "Competitive", "Deathmatch"
 	end
 end)
 
-mainSector:AddDropdown("Play Sound", {"Planted", "Becky", "Beep", "CT Win", "T Win", "Explosion", "Rescued", "Defused", "TTT a", "TTT b" }, "", function(val)
+mainSector:AddDropdown("Play Sound", {"Planted", "Defused", "CT Win", "T Win", "TTT a", "TTT b", "Beep", "Explosion", "Rescued", "Becky", }, "-", function(val)
     	if val == "Planted" then
 		workspace.Sounds.Arm:Play()
-	elseif val == "Becky" then
-		workspace.Sounds.Becky:Play()
-	elseif val == "Beep" then
-		workspace.Sounds.Beep:Play()
+	elseif val == "Defused" then
+		workspace.Sounds.Defuse:Play()
 	elseif val == "CT Win" then
-        workspace.Sounds.CT:Play()
+		workspace.Sounds.CT:Play()
 	elseif val == "T Win" then
         workspace.Sounds.T:Play()
+	elseif val == "TTT a" then
+        workspace.RoundEnd:Play()
+	elseif val == "TTT b" then
+        workspace.RoundStart:Play()
+	elseif val == "Beep" then
+        workspace.Sounds.Beep:Play()
 	elseif val == "Explosion" then
         workspace.Sounds.Explosion:Play()
-	elseif val == "Rescued" then
+    elseif val == "Rescued" then
         workspace.Sounds.Rescue:Play()
-	elseif val == "Defused" then
-        workspace.Sounds.Defuse:Play()
-    elseif val == "TTT a" then
-        workspace.RoundEnd:Play()
-   elseif val == "TTT b" then
-        workspace.RoundStart:Play()
+   elseif val == "Becky" then
+        workspace.Sounds.Becky:Play()
 	end
 end)
 
@@ -602,6 +619,35 @@ if val == true then
     elseif val == false then
         OldSounds:Disconnect()
     end
+end)
+
+mainSector:AddToggle("Kill All", false, function(val)
+if val == true then
+	    KillAllLoop = game:GetService("RunService").RenderStepped:Connect(function()
+		pcall(function()
+			for i,v in pairs(game.Players:GetChildren()) do
+					if v.Character and v.Character.Humanoid.Health>0 and game.Players.LocalPlayer.Character.EquippedTool and v.Team ~= game.Players.LocalPlayer.Team then
+						local Arguments = {
+							[1] = v.Character.Head,
+							[2] = v.Character.Head.Position,
+							[3] = game.Players.LocalPlayer.Character.EquippedTool.Value,
+							[4] = 100,
+							[5] = game.Players.LocalPlayer.Character.Gun,
+							[8] = 10, -- Damage Multiplier
+							[9] = false,
+							[10] = false, -- Is Wallbang
+							[11] = Vector3.new(),
+							[12] = 100,
+							[13] = Vector3.new()
+						}
+						game.ReplicatedStorage.Events.HitPart:FireServer(unpack(Arguments))
+					end
+				end
+			end)
+		end)
+	elseif val == false and KillAllLoop then
+		KillAllLoop:Disconnect()
+	end
 end)
 ------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels

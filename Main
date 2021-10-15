@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeoxss/exoline/main/UILibrary", true))()
+local library = loadstring(game:HttpGet("https://pastebin.com/raw/9sUBiCQ8", true))()
 ------------------------------------------------------------------------------------------
 library.theme = {
     fontsize = 15,
@@ -8,8 +8,8 @@ library.theme = {
     backgroundcolor = Color3.fromRGB(20, 20, 20),
     tabstextcolor = Color3.fromRGB(230, 230, 230),
     bordercolor = Color3.fromRGB(60, 60, 60),
-    accentcolor = Color3.fromRGB(28, 56, 139),
-    accentcolor2 = Color3.fromRGB(16, 31, 78),
+    accentcolor = Color3.fromRGB(30, 60, 140),
+    accentcolor2 = Color3.fromRGB(20, 30, 80),
     outlinecolor = Color3.fromRGB(60, 60, 60),
     outlinecolor2 = Color3.fromRGB(0, 0, 0),
     sectorcolor = Color3.fromRGB(30, 30, 30),
@@ -23,21 +23,19 @@ library.theme = {
 ------------------------------------------------------------------------------------------
 local INST = Instance.new
 local Lighting = game:GetService("Lighting")
-local GUI = game.CoreGui
+local GUI = game:GetService("CoreGui")
 local workspace = game:GetService("Workspace")
 local Camera = workspace.CurrentCamera
 local CCE = INST("ColorCorrectionEffect", Camera)
-local player = game:GetService("Players").LocalPlayer.Character
 local client = game:GetService("Players").LocalPlayer
+local sky = INST("Sky", Lighting)
+local Crosshair = client.PlayerGui.GUI.Crosshairs.Crosshair
 ------------------------------------------------------------------------------------------
 local exoline = library:CreateWindow("exoline", Vector2.new(460, 530), Enum.KeyCode.Insert)
 ------------------------------------------------------------------------------------------
-local AimbotTab = exoline:CreateTab("Aimbot")
 local VisualsTab = exoline:CreateTab("Visuals")
 local MiscTab = exoline:CreateTab("Misc")
 local SettingsTab = exoline:CreateTab("Settings")
-------------------------------------------------------------------------------------------
-local AimbotTabSectorMain = AimbotTab:CreateSector("Main")
 ------------------------------------------------------------------------------------------
 local SettingsTabMenuSector = SettingsTab:CreateSector("Menu", "left")
 local SettingsTabExtraSector = SettingsTab:CreateSector("Extra", "left")
@@ -45,28 +43,19 @@ local SettingsTabCreditsSector = SettingsTab:CreateSector("Credits", "right")
 ------------------------------------------------------------------------------------------
 local MiscTabMainSector = MiscTab:CreateSector("Main", "left")
 local MiscTabSkinsSector = MiscTab:CreateSector("Skins", "right")
-local MiscTabNoclipSector = MiscTab:CreateSector("Noclip", "right")
 ------------------------------------------------------------------------------------------
 local VisualsTabWorldSector = VisualsTab:CreateSector("World", "left")
 local VisualsTabViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
-local VisualsTabVMColorsSector = VisualsTab:CreateSector("Viewmodel Colors", "left")
-------------------------------------------------------------------------------------------
-AimbotTabSectorMain:AddToggle("Enabled", false, function(val)
-end)
+local VisualsTabVMColorsSector = VisualsTab:CreateSector("Viewmodel Colors", "right")
 ------------------------------------------------------------------------------------------
 SettingsTabMenuSector:AddLabel("Menu Name")
 SettingsTabMenuSector:AddTextbox("", "exoline", function(val)
     GUI.exoline.main.top.title.Text = val
 end)
 
-SettingsTabMenuSector:AddLabel("Watermark Name")
-SettingsTabMenuSector:AddTextbox("", "exoline", function(val)
-    GUI.watermark.ScreenLabel.Container.Text.Text = val
-end)
-
 SettingsTabExtraSector:AddButton("Rejoin", function(val)
-        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
-    end)
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, client)
+end)
 
 SettingsTabExtraSector:AddButton("Copy Game Invite", function(val)
     setclipboard("Roblox.GameLauncher.joinGameInstance("..game.PlaceId..", '"..game.JobId.."')")
@@ -224,9 +213,9 @@ if val == true then
     		local CurrentSpectators = ""
     		for i,v in pairs(game.Players:GetChildren()) do 
     			pcall(function()
-    				if v ~= game.Players.LocalPlayer then
+    				if v ~= client then
     					if not v.Character then 
-    						if (v.CameraCF.Value.p - game.Workspace.CurrentCamera.CFrame.p).Magnitude < 10 then 
+    						if (v.CameraCF.Value.p - Camera.CFrame.p).Magnitude < 10 then 
     							if CurrentSpectators == "" then
     								CurrentSpectators = v.Name
     							else
@@ -497,7 +486,7 @@ if val == true then
     end
 end)
 
-local KSCP = KS:AddColorpicker(Color3.new(1,1,1), function(val)
+KS:AddColorpicker(Color3.new(1,1,1), function(val)
     GUI.Keystrokes.Main.W.TextColor3 = val
     GUI.Keystrokes.Main.A.TextColor3 = val
     GUI.Keystrokes.Main.S.TextColor3 = val
@@ -508,79 +497,78 @@ MiscTabMainSector:AddToggle("Old Sounds", false, function(val)
 if val == true then
     OldSounds = game:GetService("RunService").RenderStepped:Connect(function()
         pcall(function()
-    		local player = client.Character
-    		if player.EquippedTool.Value == "AK47" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://1112730119"
+    		if client.Character.EquippedTool.Value == "AK47" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://1112730119"
     		end
     
-    		if player.EquippedTool.Value == "M4A1" then
-    			player.Gun.SShoot.SoundId = "rbxassetid://1665639883"
-    			player.Gun.Shoot.SoundId = "rbxassetid://2515498997"
+    		if client.Character.EquippedTool.Value == "M4A1" then
+    			client.Character.Gun.SShoot.SoundId = "rbxassetid://1665639883"
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://2515498997"
     		end
     
-            	if player.EquippedTool.Value == "Glock" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://1112951656"
+            if client.Character.EquippedTool.Value == "Glock" then
+				client.Character.Gun.Shoot.SoundId = "rbxassetid://1112951656"
     		end
     
-    		if player.EquippedTool.Value == "Galil" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://344800912"
+    		if client.Character.EquippedTool.Value == "Galil" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://344800912"
     		end
     
-    		if player.EquippedTool.Value == "USP" then
-    			player.Gun.SShoot.SoundId = "rbxassetid://1112952739"
-    			player.Gun.Shoot.SoundId = "rbxassetid://2515499360"
+    		if client.Character.EquippedTool.Value == "USP" then
+    			client.Character.Gun.SShoot.SoundId = "rbxassetid://1112952739"
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://2515499360"
     		end
     		
-    	    if player.EquippedTool.Value == "P2000" then
-			player.Gun.Shoot.SoundId = "rbxassetid://263589107"
+    	    if client.Character.EquippedTool.Value == "P2000" then
+				client.Character.Gun.Shoot.SoundId = "rbxassetid://263589107"
 		    end
     
-    		if player.EquippedTool.Value == "P250" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://340365431"
+    		if  client.Character.EquippedTool.Value == "P250" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://340365431"
     		end
     
-    		if player.EquippedTool.Value == "DesertEagle" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://202918645"
+    		if client.Character.EquippedTool.Value == "DesertEagle" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://202918645"
     		end
     
-    		if player.EquippedTool.Value == "MP9" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://222888810"
+    		if client.Character.EquippedTool.Value == "MP9" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://222888810"
     		end
     
-    		if player.EquippedTool.Value == "UMP" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://206953341"
+    		if client.Character.EquippedTool.Value == "UMP" then
+    		    client.Character.Gun.Shoot.SoundId = "rbxassetid://206953341"
     		end
     
-    		if player.EquippedTool.Value == "Famas" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://206953280"
+    		if client.Character.EquippedTool.Value == "Famas" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://206953280"
     		end
     
-    		if player.EquippedTool.Value == "Scout" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://1112858108"
+    		if client.Character.EquippedTool.Value == "Scout" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://1112858108"
     		end
     
-    		if player.EquippedTool.Value == "AUG" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://515215839"
+    		if client.Character.EquippedTool.Value == "AUG" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://515215839"
     		end
     
-    		if player.EquippedTool.Value == "AWP" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://202918637"
+    		if client.Character.EquippedTool.Value == "AWP" then
+    		    client.Character.Gun.Shoot.SoundId = "rbxassetid://202918637"
     		end
     
-    		if player.EquippedTool.Value == "G3SG1" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://340365815"
+    		if client.Character.EquippedTool.Value == "G3SG1" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://340365815"
     		end
     
-    		if player.EquippedTool.Value == "SG" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://347270113"
+    		if client.Character.EquippedTool.Value == "SG" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://347270113"
     		end
     
-         	if player.EquippedTool.Value == "M4A4" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://202918741"
+         	if client.Character.EquippedTool.Value == "M4A4" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://202918741"
     		end
     
-          	if player.EquippedTool.Value == "Tec9" then
-    			player.Gun.Shoot.SoundId = "rbxassetid://206953317"
+          	if client.Character.EquippedTool.Value == "Tec9" then
+    			client.Character.Gun.Shoot.SoundId = "rbxassetid://206953317"
           	    end
             end)
         end)
@@ -589,18 +577,31 @@ if val == true then
     end
 end)
 
+MiscTabMainSector:AddToggle("Infinite Cash", false, function(val)
+if val == true then
+		local oldcash = client.Cash.Value
+		game:GetService("RunService"):BindToRenderStep("InfCash", 100, function()
+			client.Cash.Value = 16000   
+		end)
+	elseif val == false then
+		game:GetService("RunService"):UnbindFromRenderStep("InfCash")
+		wait()
+		client.Cash.Value = oldcash
+	end
+end)    
+
 MiscTabMainSector:AddToggle("Kill All", false, function(val)
 if val == true then
-	    KillAllLoop = game:GetService("RunService").RenderStepped:Connect(function()
+    KillAllLoop = game:GetService("RunService").RenderStepped:Connect(function()
 		pcall(function()
 			for i,v in pairs(game.Players:GetChildren()) do
-					if v.Character and v.Character.Humanoid.Health>0 and game.Players.LocalPlayer.Character.EquippedTool and v.Team ~= game.Players.LocalPlayer.Team then
+					if v.Character and v.Character.Humanoid.Health>0 and Character.EquippedTool and v.Team ~= client.Team then
 						local Arguments = {
 							[1] = v.Character.Head,
 							[2] = v.Character.Head.Position,
-							[3] = game.Players.LocalPlayer.Character.EquippedTool.Value,
+							[3] = client.Character.EquippedTool.Value,
 							[4] = 100,
-							[5] = game.Players.LocalPlayer.Character.Gun,
+							[5] = client.Character.Gun,
 							[8] = 10, -- Damage Multiplier
 							[9] = false,
 							[10] = false, -- Is Wallbang
@@ -615,21 +616,6 @@ if val == true then
 		end)
 	elseif val == false and KillAllLoop then
 		KillAllLoop:Disconnect()
-	end
-end)
-
-------------------------------------------------------------------------------------------
-local NoclipEnabled = MiscTabNoclipSector:AddToggle("Enabled", false, function(val)
-	if val == true then
-		NoclipLoop = game:GetService("RunService").Stepped:Connect(function()
-			for i,v in pairs(client.Character:GetChildren()) do
-				if v:IsA("BasePart") and v.CanCollide == true then
-					v.CanCollide = false
-				end
-            end
-		end)
-	elseif val == false then
-		NoclipLoop:Disconnect()
 	end
 end)
 ------------------------------------------------------------------------------------------
@@ -660,6 +646,64 @@ end)
 VisualsTabWorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
     CCE.TintColor = val
 end)
+
+VisualsTabWorldSector:AddDropdown("Skybox", {"Anime Sky", "Pink Vision", "Space", "Cloudy Sky", "Alien Red", "Stary Night" }, "-", function(val)
+local sky = Lighting.Sky
+	if val == "Anime Sky" then
+		sky.SkyboxLf = "http://www.roblox.com/asset/?id=6598069162"
+        sky.SkyboxBk = "http://www.roblox.com/asset/?id=6598038571"
+        sky.SkyboxDn = "http://www.roblox.com/asset/?id=6598060864"
+        sky.SkyboxFt = "http://www.roblox.com/asset/?id=6598069162"
+        sky.SkyboxLf = "http://www.roblox.com/asset/?id=6598069162"
+        sky.SkyboxRt = "http://www.roblox.com/asset/?id=6598083861"
+        sky.SkyboxUp = "http://www.roblox.com/asset/?id=6598088065"
+
+	elseif val == "Pink Vision" then
+        sky.SkyboxLf = "http://www.roblox.com/asset/?id=6593932587"
+        sky.SkyboxBk = "http://www.roblox.com/asset/?id=6593929026"
+        sky.SkyboxDn = "http://www.roblox.com/asset/?id=6593930140"
+        sky.SkyboxFt = "http://www.roblox.com/asset/?id=6593931249"
+        sky.SkyboxLf = "http://www.roblox.com/asset/?id=6593932587"
+        sky.SkyboxRt = "http://www.roblox.com/asset/?id=6593933789"
+        sky.SkyboxUp = "http://www.roblox.com/asset/?id=6593935319"
+
+	elseif val == "Space" then
+        sky.SkyboxLf = "http://www.roblox.com/asset/?id=149397684"
+        sky.SkyboxBk = "http://www.roblox.com/asset/?id=149397692"
+		sky.SkyboxDn = "http://www.roblox.com/asset/?id=149397686"
+		sky.SkyboxFt = "http://www.roblox.com/asset/?id=149397697"
+		sky.SkyboxLf = "http://www.roblox.com/asset/?id=149397684"
+		sky.SkyboxRt = "http://www.roblox.com/asset/?id=149397688"
+		sky.SkyboxUp = "http://www.roblox.com/asset/?id=149397702"
+		
+	elseif val == "Cloudy Sky" then
+        sky.SkyboxLf = "http://www.roblox.com/asset/?id=252760980"
+        sky.SkyboxBk = "http://www.roblox.com/asset/?id=252760981"
+		sky.SkyboxDn = "http://www.roblox.com/asset/?id=252763035"
+		sky.SkyboxFt = "http://www.roblox.com/asset/?id=52761439"
+		sky.SkyboxLf = "http://www.roblox.com/asset/?id=252760980"
+		sky.SkyboxRt = "http://www.roblox.com/asset/?id=252760986"
+		sky.SkyboxUp = "http://www.roblox.com/asset/?id=252762652"
+		
+	elseif val == "Alien Red" then
+		sky.SkyboxBk = "http://www.roblox.com/asset/?id=1012890"
+		sky.SkyboxDn = "http://www.roblox.com/asset/?id=1012891"
+		sky.SkyboxFt = "http://www.roblox.com/asset/?id=1012887"
+		sky.SkyboxLf = "http://www.roblox.com/asset/?id=1012889"
+		sky.SkyboxRt = "http://www.roblox.com/asset/?id=1012888"
+		sky.SkyboxUp = "http://www.roblox.com/asset/?id=1014449"
+		
+	elseif val == "Stary Night" then
+	    sky.SkyboxBk = "http://www.roblox.com/asset/?id=2240134413"
+		sky.SkyboxDn = "http://www.roblox.com/asset/?id=2240136039"
+		sky.SkyboxFt = "http://www.roblox.com/asset/?id=2240130790"
+		sky.SkyboxLf = "http://www.roblox.com/asset/?id=2240133550"
+		sky.SkyboxRt = "http://www.roblox.com/asset/?id=2240132643"
+		sky.SkyboxUp = "http://www.roblox.com/asset/?id=2240135222"
+	end
+end)
+------------------------------------------------------------------------------------------
+
 ------------------------------------------------------------------------------------------
 VisualsTabVMColorsSector:AddToggle("Enabled", false, function(val)
     ArmsColorsEnabled = val
@@ -700,6 +744,17 @@ mt.__namecall = newcclosure(function(self, ...)
 			return
 		elseif method == "FireServer" and self.Name == "ControlTurn" and SECHS == true then
 			return
+		elseif method == "FireServer" and self.Name == "HitPart" then
+			spawn(function()
+				if BulletTracersEnabled == true then
+					local beam = createBeam(game.Players.LocalPlayer.Character.Head.CFrame.p, args[2])
+					for i = 1, 60 * 5 do
+						wait()
+						beam.Transparency = i / (60 * 5)
+					end
+					beam:Destroy()
+				end
+			end)
 		end
 	end
     return oldNamecall(self, unpack(args))
@@ -721,25 +776,25 @@ Camera.ChildAdded:Connect(function(ViewmodelFolder)
 					RightArm.Reflectance = 0
 					RightArm.Mesh.TextureId = ""
 					RightArm.Color = ArmsColorsColor
-					RightArm.Material = "Neon"
+					RightArm.Material = "ForceField"
 					
 					LeftArm.Transparency = ArmsColorsTransparency
 					LeftArm.Reflectance = 0
 					LeftArm.Mesh.TextureId = ""
 					LeftArm.Color = ArmsColorsColor
-					LeftArm.Material = "Neon"
+					LeftArm.Material = "ForceField"
 					
 					RightGlove.Transparency = ArmsColorsTransparency
 					RightGlove.Reflectance = 0
 					RightGlove.Mesh.TextureId = ""
 					RightGlove.Color = ArmsColorsColor
-					RightGlove.Material = "Neon"
+					RightGlove.Material = "ForceField"
 					
 					LeftGlove.Transparency = ArmsColorsTransparency
 					LeftGlove.Reflectance = 0
 					LeftGlove.Mesh.TextureId = ""
 					LeftGlove.Color = ArmsColorsColor
-					LeftGlove.Material = "Neon"
+					LeftGlove.Material = "ForceField"
 					
 					if RightSleeve and LeftSleeve then
 					
@@ -747,13 +802,13 @@ Camera.ChildAdded:Connect(function(ViewmodelFolder)
 					RightSleeve.Reflectance = 0
 					RightSleeve.Mesh.TextureId = ""
 					RightSleeve.Color = ArmsColorsColor
-					RightSleeve.Material = "Neon"
+					RightSleeve.Material = "ForceField"
 					
 					LeftSleeve.Transparency = ArmsColorsTransparency
 					LeftSleeve.Reflectance = 0
 					LeftSleeve.Mesh.TextureId = ""
 					LeftSleeve.Color = ArmsColorsColor
-					LeftSleeve.Material = "Neon"
+					LeftSleeve.Material = "ForceField"
 					
 					end
 				end
@@ -773,4 +828,36 @@ Camera.ChildAdded:Connect(function(ViewmodelFolder)
 		end
 	end)
 end)
+------------------------------------------------------------------------------------------
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local ScreenGui = GUI:FindFirstChild("MouseUnlockerGui") or Instance.new("ScreenGui")
+ScreenGui.Name = "MouseUnlockerGui"
+ScreenGui.Enabled = true
+ScreenGui.Parent = GUI
+
+local TextButton = Instance.new("TextButton")
+TextButton.Name = "ModalButton"
+TextButton.Modal = true
+TextButton.Size = UDim2.new(0, 0, 0, 0)
+TextButton.Position = UDim2.new(0, 0, 0, 0)
+TextButton.Visible = true
+TextButton.Parent = ScreenGui
+
+UserInputService.InputBegan:Connect(function(inputObject, gameProcessedEvent)
+    if inputObject.KeyCode == Enum.KeyCode.Insert then
+        TextButton.Visible = not TextButton.Visible
+    end
+end)
+
+RunService.Stepped:Connect(function()
+    if TextButton.Visible == true then
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceShow
+    else
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
+    end
+end)
+
+
 ------------------------------------------------------------------------------------------

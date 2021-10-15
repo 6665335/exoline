@@ -843,6 +843,7 @@ TextButton.Modal = true
 TextButton.Size = UDim2.new(0, 0, 0, 0)
 TextButton.Position = UDim2.new(0, 0, 0, 0)
 TextButton.Visible = true
+TextButton.Text = ""
 TextButton.Parent = ScreenGui
 
 UserInputService.InputBegan:Connect(function(inputObject, gameProcessedEvent)
@@ -858,4 +859,6 @@ RunService.Stepped:Connect(function()
         UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
     end
 end)
+
+
 ------------------------------------------------------------------------------------------

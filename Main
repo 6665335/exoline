@@ -858,6 +858,4 @@ RunService.Stepped:Connect(function()
         UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
     end
 end)
-
-
 ------------------------------------------------------------------------------------------

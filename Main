@@ -46,10 +46,12 @@ local SettingsTabCreditsSector = SettingsTab:CreateSector("Credits", "right")
 local MiscTabMainSector = MiscTab:CreateSector("Main", "left")
 local MiscTabSkinsSector = MiscTab:CreateSector("Skins", "right")
 ------------------------------------------------------------------------------------------
+local VisualsTabESPSector = VisualsTab:CreateSector("ESP", "left")
+local VisualsTabESPSettingsSector = VisualsTab:CreateSector("ESP Settings", "left")
 local VisualsTabWorldSector = VisualsTab:CreateSector("World", "left")
 local VisualsTabViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
 local VisualsTabVMColorsSector = VisualsTab:CreateSector("Viewmodel Colors", "right")
-local VisualsTabFOVCircleSector = VisualsTab:CreateSector("FOV Circle", "left")
+local VisualsTabFOVCircleSector = VisualsTab:CreateSector("FOV Circle", "right")
 local VisualsTabOthersSector = VisualsTab:CreateSector("Others", "left")
 ------------------------------------------------------------------------------------------
 SettingsTabMenuSector:AddLabel("Menu Name")
@@ -122,6 +124,11 @@ MiscTabMainSector:AddDropdown("Play Sound", {"Planted", "Defused", "CT Win", "T 
    elseif val == "Becky" then
         workspace.Sounds.Becky:Play()
 	end
+end)
+
+MiscTabMainSector:AddButton("Godmode", function()
+	client.Character.Humanoid.Parent = nil
+	INST("Humanoid", client.Character)
 end)
 
 local SL = MiscTabMainSector:AddToggle("Spectator List", false, function(val)
@@ -246,11 +253,11 @@ elseif val == false then
     end
 end)
 
-local SLCP = SL:AddColorpicker(Color3.new(1,1,1), function(val)
+local SLCP = SL:AddColorpicker(Color3.fromRGB(255, 255, 255), function(val) 
     GUI.SpectatorsList.Frame["List Text"].BorderColor3 = val
 end)
 
-local WM = MiscTabMainSector:AddToggle("Watermark", false, function(val)
+local MiscTabMainSectorWatermark = MiscTabMainSector:AddToggle("Watermark", false, function(val)
 if val == true then
     local watermark = INST("ScreenGui")
     local ScreenLabel = INST("Frame")
@@ -366,7 +373,7 @@ if val == true then
 	end
 end) 
 
-local WMCP = WM:AddColorpicker(Color3.new(1,1,1), function(val)
+local MiscTabMainSectorWatermarkColor = MiscTabMainSectorWatermark:AddColorpicker(Color3.fromRGB(255, 255, 255), function(val)
     GUI.watermark.ScreenLabel.BorderColor3 = val
 end)
 
@@ -637,6 +644,213 @@ local VisualsTabViewmodelSectorZOffset = VisualsTabViewmodelSector:AddSlider("Z 
     ViewmodelZ = val
 end)
 ------------------------------------------------------------------------------------------
+   local bj = game:GetService("Players")
+   local bk = bj.LocalPlayer
+   local aV = bk:GetMouse()
+   local cam = workspace.CurrentCamera
+   local bl = getrawmetatable(game)
+   local bm = bl.__namecall
+   local bn = bl.__index
+   local bo = bl.__newindex
+   local bq = game:GetService("RunService")
+   local aW = game:GetService("UserInputService")
+   local bs = game:GetService("Lighting")
+   
+   local boxCOlor = Color3.new(1,1,1)
+   local NameColor = Color3.new(1,1,1)
+   local WeaponCOLOR = Color3.new(1,1,1)
+   local HealthCOLOR = Color3.new(1,1,1)
+   local FontSizeff = 14
+   
+   local boxf = false
+   local activef = true
+   local healthf = false
+   local namesf = false
+   local weaponf = false
+   local Teammates = false
+   local Enemies = true
+   
+   local cT = {}
+   local cU = {}
+   
+   do
+       cU.default = {
+           Line = {Thickness = 1.5, Color = Color3.fromRGB(255, 255, 255), Visible = false},
+           Text = {
+               Size = 13,
+               Center = true,
+               Outline = true,
+               Font = 0,
+               Color = Color3.fromRGB(255, 255, 255),
+               Visible = false
+           },
+           Square = {Thickness = 1.5, Filled = false, Color = Color3.fromRGB(255, 255, 255), Visible = false}
+       }
+       function cU.create(aq)
+           local cV = Drawing.new(aq)
+           for bc, j in pairs(cU.default[aq]) do
+               cV[bc] = j
+           end
+           return cV
+       end
+       function cU.add(c0)
+           if not cT[c0] then
+               cT[c0] = {
+                   Name = cU.create("Text"),
+                   Weapon = cU.create("Text"),
+                   BoxOutline = cU.create("Square"),
+                   Box = cU.create("Square"),
+                   HealthOutline = cU.create("Line"),
+                   Health = cU.create("Line")
+               }
+           end
+       end
+       for af, c0 in pairs(bj:GetPlayers()) do
+           if c0 ~= bk then
+               cU.add(c0)
+           end
+       end
+       bj.PlayerAdded:Connect(cU.add)
+       bj.PlayerRemoving:Connect(
+           function(c0)
+               wait()
+               if cT[c0] then
+                   for bc, j in pairs(cT[c0]) do
+                       for cW, cX in pairs(j) do
+                           if j then
+                               j:Remove()
+                           end
+                       end
+                   end
+                   cT[c0] = nil
+               end
+           end
+       )
+   end
+   bq.RenderStepped:Connect(
+       function()
+           for af, c0 in pairs(bj:GetPlayers()) do
+               local aA = cT[c0]
+               if aA ~= nil then
+                   if
+                       c0 ~= bk and c0.Character and c0.Character:FindFirstChild("Humanoid") and
+                           c0.Character:FindFirstChild("HumanoidRootPart") and
+                            activef and c0.Team ~= bk.Team then
+                       local bV = c0.Character.HumanoidRootPart
+                       local c1, cY = cam:WorldToViewportPoint(bV.Position)
+                       local a6 =
+                           (cam:WorldToViewportPoint(bV.Position - Vector3.new(0, 3, 0)).Y -
+                           cam:WorldToViewportPoint(bV.Position + Vector3.new(0, 2.6, 0)).Y) /
+                           2
+                           
+   
+   
+                       aA.Box.Color = boxCOlor
+                       aA.Box.Size = Vector2.new(a6 * 1.5, a6 * 1.9)
+                       aA.Box.Position = Vector2.new(c1.X - a6 * 1.5 / 2, c1.Y - a6 * 1.6 / 2)
+                       aA.BoxOutline.Color = Color3.fromRGB(0, 0, 0)
+                       aA.BoxOutline.Thickness = 3
+                       aA.BoxOutline.Size = aA.Box.Size
+                       aA.BoxOutline.Position = aA.Box.Position
+                       aA.Health.Color = HealthCOLOR
+                       aA.Health.From = Vector2.new(aA.Box.Position.X - 5, aA.Box.Position.Y + aA.Box.Size.Y)
+                       aA.Health.To =
+                           Vector2.new(
+                           aA.Health.From.X,
+                           aA.Health.From.Y -
+                               c0.Character.Humanoid.Health / c0.Character.Humanoid.MaxHealth * aA.Box.Size.Y
+                       )
+                       aA.HealthOutline.Color = Color3.fromRGB(0, 0, 0)
+                       aA.HealthOutline.Thickness = 3
+                       aA.HealthOutline.From = Vector2.new(aA.Health.From.X, aA.Box.Position.Y + aA.Box.Size.Y + 1)
+                       aA.HealthOutline.To = Vector2.new(aA.Health.From.X, aA.Health.From.Y - 1 * aA.Box.Size.Y - 1)
+                       aA.Name.Color = NameColor
+                       aA.Name.Text = c0.Name
+                       aA.Name.Position = Vector2.new(aA.Box.Size.X / 2 + aA.Box.Position.X, aA.Box.Position.Y - 16)
+                       aA.Name.Font = Drawing.Fonts.Plex
+                       aA.Name.Outline = true
+                       aA.Name.Size = FontSizeff
+                       aA.Weapon.Color = WeaponCOLOR
+   
+   
+    
+                       aA.Weapon.Position =
+                           Vector2.new(aA.Box.Size.X / 2 + aA.Box.Position.X, aA.Box.Size.Y + aA.Box.Position.Y + 1)
+                       aA.Weapon.Font = Drawing.Fonts.Plex
+                       aA.Weapon.Outline = true
+                       aA.Weapon.Size = FontSizeff
+                       if boxf then
+                           aA.Box.Visible = cY
+                       
+                               aA.BoxOutline.Visible = cY
+                       
+                 
+                           
+                       else
+                           aA.Box.Visible = false
+                           aA.BoxOutline.Visible = false
+                       end
+                       if healthf then
+                           aA.Health.Visible = cY
+                    
+                               aA.HealthOutline.Visible = cY
+   
+                       
+                       else
+                           aA.Health.Visible = false
+                           aA.HealthOutline.Visible = false
+                       end
+                       aA.Name.Visible = namesf and cY or false
+                       aA.Weapon.Visible = weaponf and cY or false
+                   else
+                       aA.Box.Visible = false
+                       aA.BoxOutline.Visible = false
+                       aA.HealthOutline.Visible = false
+                       aA.Health.Visible = false
+                       aA.Name.Visible = false
+                       aA.Weapon.Visible = false
+                   end
+               end
+           end
+       end)
+------------------------------------------------------------------------------------------
+VisualsTabESPSector:AddToggle("Enabled", false, function(val)
+    activef = val
+end)
+
+VisualsTabESPSector:AddToggle("Show Team", false, function(val)
+    Teammates = val
+    Enemies = val
+end)
+
+local VisualsTabESPSectorBox = VisualsTabESPSector:AddToggle("Boxes", false, function(val)
+    boxf = val
+end)
+
+local VisualsTabESPSectorBoxColor = VisualsTabESPSectorBox:AddColorpicker(Color3.new(1,1,1), function(val) 
+    boxCOlor = val
+end)
+
+local VisualsTabESPSectorHealthBar = VisualsTabESPSector:AddToggle("Health Bar", false, function(val)
+    healthf = val
+end)
+
+local VisualsTabESPSectorHealthBarColor = VisualsTabESPSectorHealthBar:AddColorpicker(Color3.fromRGB(0, 255, 0), function(val)
+    HealthCOLOR = val
+end)
+
+local VisualsTabESPSectorName = VisualsTabESPSector:AddToggle("Names", false, function(val)
+    namesf = val
+end)
+
+local VisualsTabESPSectorNameColor = VisualsTabESPSectorName:AddColorpicker(Color3.new(1,1,1), function(val)
+    NameColor = val
+end)
+-------------------------------------------------------------------------------------
+VisualsTabESPSettingsSector:AddSlider("Font Size", 0, 14, 30, 1, "", function(val)
+    FontSizeff = val
+end)
+-------------------------------------------------------------------------------------
 VisualsTabWorldSector:AddSlider("Saturation", 0, 0, 3, 1, "", function(val)
     CCE.Saturation = val
 end)
@@ -648,7 +862,6 @@ end)
 VisualsTabWorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val) 
     CCE.TintColor = val
 end)
-
 ------------------------------------------------------------------------------------------
    local Camera = workspace.CurrentCamera
    local Players = game:GetService("Players")
@@ -803,6 +1016,7 @@ AimbotTabMainSector:AddDropdown("Hitboxes", {"Head", "Body", "Random"}, "-", fun
 	    
 	elseif val == "Body" then
      getfenv().lock = "Body"
+     
 	elseif val == "Random" then
 	    getfenv().lock = "Random"
 	end

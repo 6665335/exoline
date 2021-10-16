@@ -28,14 +28,16 @@ local workspace = game:GetService("Workspace")
 local Camera = workspace.CurrentCamera
 local CCE = INST("ColorCorrectionEffect", Camera)
 local client = game:GetService("Players").LocalPlayer
-local sky = INST("Sky", Lighting)
 local Crosshair = client.PlayerGui.GUI.Crosshairs.Crosshair
 ------------------------------------------------------------------------------------------
 local exoline = library:CreateWindow("exoline", Vector2.new(460, 530), Enum.KeyCode.Insert)
 ------------------------------------------------------------------------------------------
+local AimbotTab = exoline:CreateTab("Aimbot")
 local VisualsTab = exoline:CreateTab("Visuals")
 local MiscTab = exoline:CreateTab("Misc")
 local SettingsTab = exoline:CreateTab("Settings")
+------------------------------------------------------------------------------------------
+local AimbotTabMainSector = AimbotTab:CreateSector("Main", "left")
 ------------------------------------------------------------------------------------------
 local SettingsTabMenuSector = SettingsTab:CreateSector("Menu", "left")
 local SettingsTabExtraSector = SettingsTab:CreateSector("Extra", "left")
@@ -47,6 +49,8 @@ local MiscTabSkinsSector = MiscTab:CreateSector("Skins", "right")
 local VisualsTabWorldSector = VisualsTab:CreateSector("World", "left")
 local VisualsTabViewmodelSector = VisualsTab:CreateSector("Viewmodel", "right")
 local VisualsTabVMColorsSector = VisualsTab:CreateSector("Viewmodel Colors", "right")
+local VisualsTabFOVCircleSector = VisualsTab:CreateSector("FOV Circle", "left")
+local VisualsTabOthersSector = VisualsTab:CreateSector("Others", "left")
 ------------------------------------------------------------------------------------------
 SettingsTabMenuSector:AddLabel("Menu Name")
 SettingsTabMenuSector:AddTextbox("", "exoline", function(val)
@@ -578,17 +582,15 @@ if val == true then
 end)
 
 MiscTabMainSector:AddToggle("Infinite Cash", false, function(val)
-if val == true then
-		local oldcash = client.Cash.Value
-		game:GetService("RunService"):BindToRenderStep("InfCash", 100, function()
-			client.Cash.Value = 16000   
+	if val == true then
+		client.Cash.Value = 16000
+		InfCash = client.Cash:GetPropertyChangedSignal("Value"):connect(function()
+			client.Cash.Value = 16000
 		end)
-	elseif val == false then
-		game:GetService("RunService"):UnbindFromRenderStep("InfCash")
-		wait()
-		client.Cash.Value = oldcash
+	elseif val == false and InfCash then
+		InfCash:Disconnect()
 	end
-end)    
+end)
 
 MiscTabMainSector:AddToggle("Kill All", false, function(val)
 if val == true then
@@ -623,15 +625,15 @@ VisualsTabViewmodelSector:AddToggle("Enabled", false, function(val)
     ViewmodelEnabled = val
 end)
 
-VisualsTabViewmodelSector:AddSlider("X Offset", 0, 180, 360, 1, "", function(val)
+local VisualsTabViewmodelSectorXOffset = VisualsTabViewmodelSector:AddSlider("X Offset", 0, 180, 360, 1, "", function(val)
     ViewmodelX = val
 end)
 
-VisualsTabViewmodelSector:AddSlider("Y Offset", 0, 180, 360, 1, "", function(val)
+local VisualsTabViewmodelSectorYOffset = VisualsTabViewmodelSector:AddSlider("Y Offset", 0, 180, 360, 1, "", function(val)
     ViewmodelY = val
 end)
 
-VisualsTabViewmodelSector:AddSlider("Z Offset", 0, 180, 360, 1, "", function(val)
+local VisualsTabViewmodelSectorZOffset = VisualsTabViewmodelSector:AddSlider("Z Offset", 0, 180, 360, 1, "", function(val)
     ViewmodelZ = val
 end)
 ------------------------------------------------------------------------------------------
@@ -647,7 +649,215 @@ VisualsTabWorldSector:AddColorpicker("Ambient", Color3.new(1,1,1), function(val)
     CCE.TintColor = val
 end)
 
-VisualsTabWorldSector:AddDropdown("Skybox", {"Anime Sky", "Pink Vision", "Space", "Cloudy Sky", "Alien Red", "Stary Night" }, "-", function(val)
+------------------------------------------------------------------------------------------
+   local Camera = workspace.CurrentCamera
+   local Players = game:GetService("Players")
+   local RunService = game:GetService("RunService")
+   local UserInputService = game:GetService("UserInputService")
+   local TweenService = game:GetService("TweenService")
+   local LocalPlayer = Players.LocalPlayer
+   
+   getfenv().lock = "Random" -- Head or Hitbox or Random
+   
+   fov = 250;
+   silentadaim = false
+   local fovCircle = false;
+   local st = tonumber(tick());
+   warn("Loading script...")
+   local teamcheck = true
+   
+   
+   _G.CircleSides = 64 -- How many sides the FOV circle would have.
+   _G.CircleColor = Color3.fromRGB(255, 255, 255) -- (RGB) Color that the FOV circle would appear as.
+   _G.CircleRadius = 80 -- The radius of the circle / FOV.
+   _G.CircleFilled = false -- Determines whether or not the circle is filled.
+   _G.CircleVisible = true -- Determines whether or not the circle is visible.
+   _G.CircleThickness = 0 -- The thickness of the circle.
+   
+   local FOVCircle = Drawing.new("Circle")
+   FOVCircle.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+   FOVCircle.Radius = _G.CircleRadius
+   FOVCircle.Filled = _G.CircleFilled
+   FOVCircle.Color = _G.CircleColor
+   FOVCircle.Visible = _G.CircleVisible
+   FOVCircle.Radius = _G.CircleRadius
+   FOVCircle.NumSides = _G.CircleSides
+   FOVCircle.Thickness = _G.CircleThickness
+   
+   RunService.RenderStepped:Connect(function()
+       FOVCircle.Position = Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+       FOVCircle.Radius = _G.CircleRadius
+       FOVCircle.Filled = _G.CircleFilled
+       FOVCircle.Color = _G.CircleColor
+       FOVCircle.Visible = _G.CircleVisible
+       FOVCircle.Radius = _G.CircleRadius
+       FOVCircle.NumSides = _G.CircleSides
+       FOVCircle.Thickness = _G.CircleThickness
+   end)
+   
+   function isFfa()
+       local am = #Players:GetChildren();
+       local amm = 0;
+       for i , v in pairs(Players:GetChildren()) do
+           if v.Team == LocalPlayer.Team then
+               amm = amm + 1;
+           end;
+       end;
+       return am == amm;
+   end;
+   function getnearest()
+       local nearestmagnitude = math.huge
+       local nearestenemy = nil
+       local vector = nil
+       local ffa = isFfa();
+       for i,v in next, Players:GetChildren() do
+           if teamcheck and v.Team ~= LocalPlayer.Team or not teamcheck then
+               if v.Character and  v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
+                   local vector, onScreen = Camera:WorldToScreenPoint(v.Character["HumanoidRootPart"].Position)
+                   if onScreen then
+                       local ray = Ray.new(
+                       Camera.CFrame.p,
+                       (v.Character["Head"].Position-Camera.CFrame.p).unit*500
+                       )
+                       local ignore = {
+                       LocalPlayer.Character,
+                       }
+                       local hit,position,normal=workspace:FindPartOnRayWithIgnoreList(ray,ignore)
+                       if hit and hit:FindFirstAncestorOfClass("Model") and Players:FindFirstChild(hit:FindFirstAncestorOfClass("Model").Name)then
+                           local magnitude = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(vector.X, vector.Y)).magnitude
+                           if magnitude < nearestmagnitude and magnitude <= _G.CircleRadius  then
+                               nearestenemy = v
+                               nearestmagnitude = magnitude
+                           end
+                       end
+                   end
+               end
+           end
+       end
+       return nearestenemy
+   end
+   
+   
+   local meta = getrawmetatable(game)
+   setreadonly(meta, false)
+   local oldNamecall = meta.__namecall
+   meta.__namecall = newcclosure(function(...)
+       
+       local method = getnamecallmethod()
+       local args = {...}
+       if string.find(method,'Ray') then
+           if target then
+               if args[1].Name ~= "Workspace" then
+                      print(args[1])
+                  end;
+               args[2] = Ray.new(workspace.CurrentCamera.CFrame.Position, (target.Position + Vector3.new(0,(workspace.CurrentCamera.CFrame.Position-target.Position).Magnitude/500,0) - workspace.CurrentCamera.CFrame.Position).unit * 5000)
+           end
+       end
+       return oldNamecall(unpack(args))
+   end)
+   
+   warn("Script loaded!\nTime taken: "..math.abs(tonumber(tick())-st))
+   RunService:BindToRenderStep("SilentAim",1,function()
+       if UserInputService:IsMouseButtonPressed(0) and Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChild("Humanoid") and Players.LocalPlayer.Character.Humanoid.Health > 0 then
+           local enemy = getnearest()
+           if enemy and enemy.Character and enemy.Character:FindFirstChild("Humanoid") and enemy.Character.Humanoid.Health > 0 and silentadaim then                
+               local vector, onScreen = Camera:WorldToScreenPoint(enemy.Character["Head"].Position)
+               local head = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(vector.X, vector.Y)).magnitude
+               local vector, onScreen = Camera:WorldToScreenPoint(enemy.Character["HumanoidRootPart"].Position)
+               local hitbox = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(vector.X, vector.Y)).magnitude
+               if head <= hitbox then
+                   magnitude = head
+               else
+                   magnitude = hitbox;
+               end;
+               if getfenv().lock == "Head" then
+                   target = workspace[enemy.Name]["Head"]
+               else
+             if getfenv().lock == "Body" then
+                   target = workspace[enemy.Name]["Body"]
+               else
+                   if getfenv().lock == "Random" then
+                       if magnitude == hitbox then
+                           target = workspace[enemy.Name]["HumanoidRootPart"];
+                       else
+                           target = workspace[enemy.Name]["Head"]
+                       end;
+                   else
+                       target = workspace[enemy.Name]["HumanoidRootPart"];
+                   end;
+                 end;
+               end;
+           else
+               target = nil
+         end
+       end
+   end)
+------------------------------------------------------------------------------------------   
+AimbotTabMainSector:AddToggle("Silent Aim", false, function(val)
+    silentadaim = val
+end)
+
+AimbotTabMainSector:AddDropdown("Hitboxes", {"Head", "Body", "Random"}, "-", function(val)
+	if val == "Head" then
+	    getfenv().lock = "Head"
+	    
+	elseif val == "Body" then
+     getfenv().lock = "Body"
+	elseif val == "Random" then
+	    getfenv().lock = "Random"
+	end
+end)
+
+AimbotTabMainSector:AddToggle("Team Check", false, function(val)
+    teamcheck = val
+end)
+
+AimbotTabMainSector:AddSlider("Fov", 0, 0, 360, 1, "", function(val)
+    _G.CircleRadius = val
+end)
+
+------------------------------------------------------------------------------------------
+VisualsTabVMColorsSector:AddToggle("Enabled", false, function(val)
+    ArmsColorsEnabled = val
+end)
+
+VisualsTabVMColorsSector:AddColorpicker("Arms Color", Color3.new(1,1,1), function(val) 
+    ArmsColorsColor = val
+end)
+
+VisualsTabVMColorsSector:AddSlider("Arms Transparency", 0, 0, 100, 1, "", function(val)
+    ArmsColorsTransparency = val/100
+end)
+
+VisualsTabVMColorsSector:AddColorpicker("Weapons Color", Color3.new(1,1,1), function(val)
+    ArmsColorsWeaponsColor = val
+end)
+
+VisualsTabVMColorsSector:AddSlider("Weapons Transparency", 0, 0, 100, 1, "", function(val)
+    ArmsColorsWeaponsTransparency = val/100
+end)
+------------------------------------------------------------------------------------------
+VisualsTabFOVCircleSector:AddToggle("Enabled", false, function(val)
+    _G.CircleVisible = val
+end)
+
+VisualsTabFOVCircleSector:AddToggle("Filled", false, function(val)
+    _G.CircleFilled = val
+end)
+
+VisualsTabFOVCircleSector:AddSlider("Thickness", 0, 0, 20, 1, "", function(val)
+    _G.CircleThickness = val
+end)
+
+VisualsTabFOVCircleSector:AddSlider("Sides", 0, 0, 50, 1, "", function(val)
+    _G.CircleSides = val
+end)
+
+VisualsTabFOVCircleSector:AddColorpicker("Color", Color3.new(1,1,1), function(val)
+    _G.CircleColor = val
+end)
+-------------------------------------------------------------------------------------
+VisualsTabOthersSector:AddDropdown("Skybox", {"Anime Sky", "Pink Vision", "Space", "Alien Red", "Stary Night" }, "-", function(val)
 local sky = Lighting.Sky
 	if val == "Anime Sky" then
 		sky.SkyboxLf = "http://www.roblox.com/asset/?id=6598069162"
@@ -676,15 +886,6 @@ local sky = Lighting.Sky
 		sky.SkyboxRt = "http://www.roblox.com/asset/?id=149397688"
 		sky.SkyboxUp = "http://www.roblox.com/asset/?id=149397702"
 		
-	elseif val == "Cloudy Sky" then
-        sky.SkyboxLf = "http://www.roblox.com/asset/?id=252760980"
-        sky.SkyboxBk = "http://www.roblox.com/asset/?id=252760981"
-		sky.SkyboxDn = "http://www.roblox.com/asset/?id=252763035"
-		sky.SkyboxFt = "http://www.roblox.com/asset/?id=52761439"
-		sky.SkyboxLf = "http://www.roblox.com/asset/?id=252760980"
-		sky.SkyboxRt = "http://www.roblox.com/asset/?id=252760986"
-		sky.SkyboxUp = "http://www.roblox.com/asset/?id=252762652"
-		
 	elseif val == "Alien Red" then
 		sky.SkyboxBk = "http://www.roblox.com/asset/?id=1012890"
 		sky.SkyboxDn = "http://www.roblox.com/asset/?id=1012891"
@@ -702,31 +903,33 @@ local sky = Lighting.Sky
 		sky.SkyboxUp = "http://www.roblox.com/asset/?id=2240135222"
 	end
 end)
-------------------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------------------
-VisualsTabVMColorsSector:AddToggle("Enabled", false, function(val)
-    ArmsColorsEnabled = val
+local VisualsTabOthersSectorBulletTracers = VisualsTabOthersSector:AddToggle("Bullet Tracers", false, function(val)
+    BulletTracersEnabled = val
 end)
 
-VisualsTabVMColorsSector:AddColorpicker("Arms Color", Color3.new(1,1,1), function(val) 
-    ArmsColorsColor = val
+local VisualsTabOthersSectorBulletTracersColor = VisualsTabOthersSectorBulletTracers:AddColorpicker(Color3.fromRGB(255, 255, 255), function() end)
+
+local VisualsTabOthersSectorBulletImpacts = VisualsTabOthersSector:AddToggle("Bullet Impacts", false, function(val)
+    BulletImpactsEnabled = val
 end)
 
-VisualsTabVMColorsSector:AddSlider("Arms Transparency", 0, 0, 100, 1, "", function(val)
-    ArmsColorsTransparency = val/100
-end)
+local VisualsTabOthersSectorBulletImpactsColor = VisualsTabOthersSectorBulletImpacts:AddColorpicker(Color3.fromRGB(255, 255, 255), function() end)
 
-VisualsTabVMColorsSector:AddColorpicker("Weapons Color", Color3.new(1,1,1), function(val)
-    ArmsColorsWeaponsColor = val
-end)
-
-VisualsTabVMColorsSector:AddSlider("Weapons Transparency", 0, 0, 100, 1, "", function(val)
-    ArmsColorsWeaponsTransparency = val/100
-end)
 -------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://pastebin.com/raw/R2qqiaBp", true))() -- Fixes Viewmodels
 ------------------------------------------------------------------------------------------
+function createBeam(p1, p2)
+	local beam = INST("Part", workspace)
+	beam.Anchored = true
+	beam.CanCollide = false
+	beam.Material = Enum.Material.ForceField
+	beam.Color = VisualsTabOthersSectorBulletTracersColor.value
+	beam.Size = Vector3.new(0.1, 0.1, (p1 - p2).magnitude)
+	beam.CFrame = CFrame.new(p1, p2) * CFrame.new(0, 0, -beam.Size.Z / 2)
+	return beam
+end
+
 local mt = getrawmetatable(game)
 local oldNamecall = mt.__namecall
 setreadonly(mt, false)
@@ -738,16 +941,9 @@ mt.__namecall = newcclosure(function(self, ...)
 		if method == "SetPrimaryPartCFrame" and self.Name == "Arms" and ViewmodelEnabled == true then
 			args[1] = args[1] * CFrame.new(Vector3.new(math.rad(ViewmodelX-180), math.rad(ViewmodelY-180), math.rad(ViewmodelZ-180)))
 		elseif method == "FireServer" and self.Name == "HitPart" then
-		elseif method == "InvokeServer" and self.Name == "Moolah" then
-			return wait(99e99)
-		elseif method == "Kick" then
-			return
-		elseif method == "FireServer" and self.Name == "ControlTurn" and SECHS == true then
-			return
-		elseif method == "FireServer" and self.Name == "HitPart" then
 			spawn(function()
 				if BulletTracersEnabled == true then
-					local beam = createBeam(game.Players.LocalPlayer.Character.Head.CFrame.p, args[2])
+					local beam = createBeam(client.Character.Head.CFrame.p, args[2])
 					for i = 1, 60 * 5 do
 						wait()
 						beam.Transparency = i / (60 * 5)
@@ -755,6 +951,28 @@ mt.__namecall = newcclosure(function(self, ...)
 					beam:Destroy()
 				end
 			end)
+    			
+    if BulletImpactsEnabled == true then
+    	spawn(function()
+    		local BulletImpacts = INST("Part")
+    			BulletImpacts.Anchored = true
+    			BulletImpacts.CanCollide = false
+    			BulletImpacts.Material = "ForceField"
+    			BulletImpacts.Color = VisualsTabOthersSectorBulletImpactsColor.value
+    			BulletImpacts.Size = Vector3.new(0.25, 0.25, 0.25)
+    			BulletImpacts.CFrame = CFrame.new(args[2])
+    			BulletImpacts.Name = "BulletImpacts"
+    			BulletImpacts.Parent = Camera
+    			wait(2)
+    			BulletImpacts:Destroy()
+    		end)
+    	end
+		elseif method == "InvokeServer" and self.Name == "Moolah" then
+			return wait(99e99)
+		elseif method == "Kick" then
+			return
+		elseif method == "FireServer" and self.Name == "ControlTurn" and SECHS == true then
+			return
 		end
 	end
     return oldNamecall(self, unpack(args))
@@ -832,13 +1050,13 @@ end)
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
-local ScreenGui = GUI:FindFirstChild("MouseUnlockerGui") or Instance.new("ScreenGui")
+local ScreenGui = GUI:FindFirstChild("MouseUnlockerGui") or INST("ScreenGui")
 ScreenGui.Name = "MouseUnlockerGui"
 ScreenGui.Enabled = true
 ScreenGui.Parent = GUI
 
-local TextButton = Instance.new("TextButton")
-TextButton.Name = "ModalButton"
+local TextButton = INST("TextButton")
+TextButton.Name = ""
 TextButton.Modal = true
 TextButton.Size = UDim2.new(0, 0, 0, 0)
 TextButton.Position = UDim2.new(0, 0, 0, 0)
@@ -859,6 +1077,4 @@ RunService.Stepped:Connect(function()
         UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
     end
 end)
-
-
 ------------------------------------------------------------------------------------------
